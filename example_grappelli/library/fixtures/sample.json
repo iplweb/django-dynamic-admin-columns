@@ -1,0 +1,95 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "username": "alice",
+            "first_name": "Alicja",
+            "last_name": "Przykład",
+            "email": "alice@example.com",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "password": "pbkdf2_sha256$1200000$jiNnoHVS0Mp0PVbLrloUAx$JZR0Kf73Fe2f5nPWcPe2i5sXu2QnCJuWAt2MXswKD7c="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "username": "bob",
+            "first_name": "Bartek",
+            "last_name": "Przykład",
+            "email": "bob@example.com",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "password": "pbkdf2_sha256$1200000$asa0yrgDz4RAyKvz96Vug7$L8wd7QokQVd15IDauewLmI4YyPf4qGfcqJTeeWpnnss="
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 1,
+        "fields": {
+            "title": "Lalka",
+            "author": "Bolesław Prus",
+            "isbn": "9788373271487",
+            "pages": 928,
+            "notes": "Powieść o miłości, ambicji i społecznych podziałach w XIX-wiecznej Warszawie.",
+            "published_on": "1890-01-01",
+            "language": "pl"
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 2,
+        "fields": {
+            "title": "Pan Tadeusz",
+            "author": "Adam Mickiewicz",
+            "isbn": "9788373273986",
+            "pages": 384,
+            "notes": "Epopeja narodowa w 12 księgach wierszem.",
+            "published_on": "1834-06-28",
+            "language": "pl"
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 3,
+        "fields": {
+            "title": "Ferdydurke",
+            "author": "Witold Gombrowicz",
+            "isbn": "9788308040003",
+            "pages": 320,
+            "notes": "Groteskowa powieść o niedojrzałości i formach społecznych.",
+            "published_on": "1937-10-01",
+            "language": "pl"
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 4,
+        "fields": {
+            "title": "Solaris",
+            "author": "Stanisław Lem",
+            "isbn": "9788308040508",
+            "pages": 256,
+            "notes": "Klasyka polskiej fantastyki naukowej.",
+            "published_on": "1961-01-01",
+            "language": "pl"
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 5,
+        "fields": {
+            "title": "Quo Vadis",
+            "author": "Henryk Sienkiewicz",
+            "isbn": "9788373270824",
+            "pages": 608,
+            "notes": "Powieść historyczna z czasów Nerona, nagrodzona literackim Noblem.",
+            "published_on": "1896-03-26",
+            "language": "pl"
+        }
+    }
+]

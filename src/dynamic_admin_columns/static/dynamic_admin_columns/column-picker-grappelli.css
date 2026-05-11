@@ -1,0 +1,100 @@
+/*
+ * django-dynamic-admin-columns — grappelli overrides.
+ *
+ * Loaded *after* ``column-picker.css`` only when the
+ * ``DynamicColumnsMixin`` detects ``grappelli`` in INSTALLED_APPS. The
+ * stock stylesheet handles the modal layout (backdrop, content card,
+ * list rows) which is admin-skin-neutral; this file deals with the two
+ * things grappelli styles differently:
+ *
+ *   1. The picker anchor in ``object-tools`` — recoloured to our teal
+ *      pill so it stands out from the dark "Add" pill grappelli emits.
+ *   2. The modal action buttons — grappelli's global ``overflow:hidden;
+ *      height:28px`` on ``button`` cuts off our labels, so we set a
+ *      sensible min-width and ensure the height accommodates the text.
+ */
+
+/* ---------- Picker pill in object-tools ---------- */
+/* ``.grp-object-tools a`` (specificity 0,1,1) is what grappelli styles;
+ * we match its specificity with the dual selector below and rely on
+ * source order (this file loads after grappelli's screen.css) to win. */
+.grp-object-tools a#dyncol-button {
+    color: #fff;
+    border: 1px solid #417690;
+    background-image: linear-gradient(#79aec8, #5b94b1);
+    opacity: 1;
+}
+.grp-object-tools a#dyncol-button:hover,
+.grp-object-tools a#dyncol-button:focus {
+    border: 1px solid #2f5f74;
+    background-image: linear-gradient(#5b94b1, #417690);
+    color: #fff;
+}
+.grp-object-tools a#dyncol-button.dyncol-personal {
+    background-image: linear-gradient(#417690, #2f5f74);
+}
+
+/* ---------- Modal action buttons ---------- */
+/* Grappelli's ``a.grp-button, button.grp-button`` rule sets a fixed
+ * ``height:28px`` and ``overflow:hidden`` which clip any label that
+ * does not happen to fit the implicit width grappelli assumes. We
+ * undo both: ``height:auto`` + ``min-height:28px`` keeps the chrome
+ * intact and lets the button grow vertically if needed, while
+ * ``overflow:visible`` keeps any descender from being chopped.
+ *
+ * Sizing-wise the buttons should follow their *content*, not a hard-
+ * coded min-width — the Reset button in particular swaps its label
+ * via JavaScript (``Discard personal layout`` ↔ ``Reset global
+ * defaults from code``) and the second form is markedly wider. Using
+ * ``flex: 0 0 auto`` plus ``white-space: nowrap`` makes every button
+ * pick up the natural width of its current label, and
+ * ``flex-wrap: wrap`` on the parent lets a very long Reset label
+ * push itself onto its own row instead of forcing a horizontal
+ * scroll. */
+.dyncol-modal .dyncol-actions button.grp-button {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    min-height: 28px;
+    padding: 6px 16px;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+/* Recolour the destructive Reset button so it reads as a warning even
+ * under grappelli's neutral defaults. */
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-reset {
+    color: #fff;
+    border: 1px solid #ab2b2b;
+    background-image: linear-gradient(#d34f4f, #bf3030);
+}
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-reset:hover,
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-reset:focus {
+    border: 1px solid #7c1f1f;
+    background-image: linear-gradient(#bf3030, #8b2222);
+}
+
+/* The Cancel button stays neutral (grey) so it doesn't compete with
+ * the primary "Save" CTA. */
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-cancel {
+    color: #fff;
+    border: 1px solid #777;
+    background-image: linear-gradient(#999, #888);
+}
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-cancel:hover,
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-cancel:focus {
+    border: 1px solid #555;
+    background-image: linear-gradient(#888, #666);
+}
+
+/* Save uses our brand teal to match the picker pill above. */
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-save {
+    color: #fff;
+    border: 1px solid #417690;
+    background-image: linear-gradient(#79aec8, #5b94b1);
+}
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-save:hover,
+.dyncol-modal .dyncol-actions button.grp-button.dyncol-grp-save:focus {
+    border: 1px solid #2f5f74;
+    background-image: linear-gradient(#5b94b1, #417690);
+}

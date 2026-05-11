@@ -212,8 +212,31 @@
         return checked ? checked.value : "personal";
     }
 
-    function gettextOrLiteral(s) {
-        return typeof window.gettext === "function" ? window.gettext(s) : s;
+    // Server-rendered translations live in the page as a JSON script
+    // tag (#dyncol-i18n). Each key maps to a Polish/English string the
+    // view resolved through Django's catalog. Falls back to the literal
+    // English string when the tag is missing or a key is undefined — so
+    // the picker still works if a custom template forgets to embed the
+    // dict.
+    var I18N = {};
+    (function loadI18n() {
+        var el = document.getElementById("dyncol-i18n");
+        if (!el) return;
+        try {
+            var parsed = JSON.parse(el.textContent);
+            if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+                I18N = parsed;
+            }
+        } catch (e) {
+            // Leave I18N as the empty default; fall back to literals.
+        }
+    })();
+
+    function tr(key, fallback) {
+        if (I18N && Object.prototype.hasOwnProperty.call(I18N, key)) {
+            return I18N[key];
+        }
+        return fallback;
     }
 
     function updateStatus(scope, hasPersonal) {
@@ -221,15 +244,18 @@
         if (!status) return;
         var msg;
         if (scope === "global") {
-            msg = gettextOrLiteral(
+            msg = tr(
+                "editing_global",
                 "Editing the global defaults. Every user without a personal layout will see these columns.",
             );
         } else if (hasPersonal) {
-            msg = gettextOrLiteral(
+            msg = tr(
+                "personal_active",
                 "★ You are viewing your personal layout. Saves apply only to your account.",
             );
         } else {
-            msg = gettextOrLiteral(
+            msg = tr(
+                "global_defaults_status",
                 "You are viewing the global defaults. Saving will create a personal layout for your account.",
             );
         }
@@ -241,10 +267,11 @@
         if (!btn) return;
         if (scope === "personal") {
             btn.hidden = !hasPersonal;
-            btn.textContent = gettextOrLiteral("Discard personal layout");
+            btn.textContent = tr("discard_personal", "Discard personal layout");
         } else {
             btn.hidden = false;
-            btn.textContent = gettextOrLiteral(
+            btn.textContent = tr(
+                "reset_global",
                 "Reset global defaults from code",
             );
         }
@@ -311,14 +338,16 @@
                             saveBtn.disabled = false;
                             response.text().then(function (body) {
                                 window.alert(
-                                    "Failed to save columns: " + body,
+                                    tr("save_failed", "Failed to save columns: ") + body,
                                 );
                             });
                         }
                     })
                     .catch(function (err) {
                         saveBtn.disabled = false;
-                        window.alert("Failed to save columns: " + err);
+                        window.alert(
+                            tr("save_failed", "Failed to save columns: ") + err,
+                        );
                     });
             });
         }
@@ -329,8 +358,14 @@
                 var scope = currentScope(modal);
                 var msg =
                     scope === "global"
-                        ? "Reset the GLOBAL defaults? They will be re-derived from code on the next changelist load."
-                        : "Discard your personal column layout and use the defaults?";
+                        ? tr(
+                              "confirm_reset_global",
+                              "Reset the GLOBAL defaults? They will be re-derived from code on the next changelist load.",
+                          )
+                        : tr(
+                              "confirm_discard_personal",
+                              "Discard your personal column layout and use the defaults?",
+                          );
                 if (!window.confirm(msg)) return;
                 resetBtn.disabled = true;
                 postJson(button.dataset.resetUrl, { scope: scope }).then(
@@ -339,7 +374,7 @@
                             window.location.reload();
                         } else {
                             resetBtn.disabled = false;
-                            window.alert("Failed to reset.");
+                            window.alert(tr("reset_failed", "Failed to reset."));
                         }
                     },
                 );

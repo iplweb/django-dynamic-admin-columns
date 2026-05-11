@@ -1,89 +1,207 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Polish translation for django-dynamic-admin-columns.
+# Copyright (C) 2026 Michał Pasternak
+# This file is distributed under the same license as the django-dynamic-admin-columns package.
+# Michał Pasternak <michal.dtz@gmail.com>, 2022-2026.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: django-dynamic-admin-columns 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-16 12:57+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2026-05-11 21:59+0200\n"
+"PO-Revision-Date: 2026-05-11 21:30+0200\n"
+"Last-Translator: Michał Pasternak <michal.dtz@gmail.com>\n"
+"Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
-"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
-"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: admin.py:15
+#: admin.py:13
 msgid "Enable selected columns"
 msgstr "Włącz wybrane kolumny"
 
-#: admin.py:20
+#: admin.py:18
 msgid "Disable selected columns"
 msgstr "Wyłącz wybrane kolumny"
 
-#: admin.py:48
+#: admin.py:50
 msgid "Model admin name"
-msgstr "Nazwa modułu"
+msgstr "Nazwa modułu administracyjnego"
 
-#: admin.py:106 models.py:244
+#: admin.py:102 models.py:260
 msgid "Column name"
 msgstr "Nazwa kolumny"
 
-#: apps.py:9
-#, fuzzy
-#| msgid "Model admin name"
+#: apps.py:8
 msgid "Admin dynamic columns"
-msgstr "Kolumny modułu redagowania"
+msgstr "Dynamiczne kolumny administracji"
 
-#: models.py:186
-#, fuzzy
-#| msgid "Model admin name"
+#: mixins.py:186
+msgid ""
+"Editing the global defaults. Every user without a personal layout will see "
+"these columns."
+msgstr ""
+"Edytujesz globalne ustawienia domyślne. Każdy użytkownik bez osobistego "
+"układu zobaczy te kolumny."
+
+#: mixins.py:190
+msgid ""
+"★ You are viewing your personal layout. Saves apply only to your account."
+msgstr ""
+"★ Widzisz swój osobisty układ. Zapisy dotyczą wyłącznie Twojego konta."
+
+#: mixins.py:194 templates/dynamic_admin_columns/change_list.html:71
+#: templates/dynamic_admin_columns/grappelli/change_list.html:98
+msgid ""
+"You are viewing the global defaults. Saving will create a personal layout "
+"for your account."
+msgstr ""
+"Widzisz globalne ustawienia domyślne. Zapisanie zmian utworzy osobisty układ "
+"przypisany do Twojego konta."
+
+#: mixins.py:197 templates/dynamic_admin_columns/change_list.html:87
+#: templates/dynamic_admin_columns/grappelli/change_list.html:123
+msgid "Discard personal layout"
+msgstr "Usuń osobisty układ"
+
+#: mixins.py:198
+msgid "Reset global defaults from code"
+msgstr "Przywróć globalne ustawienia z kodu"
+
+#: mixins.py:200
+msgid ""
+"Reset the GLOBAL defaults? They will be re-derived from code on the next "
+"changelist load."
+msgstr ""
+"Zresetować GLOBALNE ustawienia? Zostaną one ponownie wyznaczone z kodu "
+"przy następnym wyświetleniu listy."
+
+#: mixins.py:204
+msgid "Discard your personal column layout and use the defaults?"
+msgstr "Usunąć Twój osobisty układ kolumn i wrócić do ustawień domyślnych?"
+
+#: mixins.py:206
+msgid "Failed to save columns: "
+msgstr "Nie udało się zapisać kolumn: "
+
+#: mixins.py:207
+msgid "Failed to reset."
+msgstr "Nie udało się zresetować."
+
+#: models.py:178
+msgid "User"
+msgstr "Użytkownik"
+
+#: models.py:180
+msgid ""
+"If set, this is a personal column configuration owned by that user. NULL "
+"rows are global defaults."
+msgstr ""
+"Jeżeli ustawione, jest to osobista konfiguracja kolumn należąca do tego "
+"użytkownika. Wiersze z wartością NULL stanowią ustawienia globalne."
+
+#: models.py:213
 msgid "Model admin"
-msgstr "Nazwa modułu"
+msgstr "Moduł administracyjny"
 
-#: models.py:187
-#, fuzzy
-#| msgid "Model admin name"
+#: models.py:214
 msgid "Model admins"
-msgstr "Nazwy modułów"
+msgstr "Moduły administracyjne"
 
-#: models.py:241
+#: models.py:257
 msgid "Parent"
-msgstr "Moduł"
+msgstr "Moduł nadrzędny"
 
-#: models.py:246
+#: models.py:262
 msgid "Enabled"
 msgstr "Widoczna"
 
-#: models.py:247
+#: models.py:263
 msgid "Ordering"
 msgstr "Kolejność"
 
-#: models.py:250
-#, fuzzy
-#| msgid "Column name"
-msgid "Column"
-msgstr "Nazwa kolumny"
-
-#: models.py:253
-msgid " of model "
-msgstr " modułu "
-
-#: models.py:260
-#, fuzzy
-#| msgid "Model admin name"
+#: models.py:269
 msgid "Model admin column"
-msgstr "Kolumna modułu redagowania"
+msgstr "Kolumna modułu administracyjnego"
 
-#: models.py:261
-#, fuzzy
-#| msgid "Model admin name"
+#: models.py:270
 msgid "Model admin columns"
-msgstr "Kolumny modułów redagowania"
+msgstr "Kolumny modułu administracyjnego"
+
+#: models.py:273
+msgid "Column"
+msgstr "Kolumna"
+
+#: models.py:276
+msgid " of model "
+msgstr " modelu "
+
+#: templates/dynamic_admin_columns/change_list.html:25
+#: templates/dynamic_admin_columns/grappelli/change_list.html:48
+msgid "Columns"
+msgstr "Kolumny"
+
+#: templates/dynamic_admin_columns/change_list.html:44
+#: templates/dynamic_admin_columns/grappelli/change_list.html:71
+msgid "Configure columns"
+msgstr "Konfiguruj kolumny"
+
+#: templates/dynamic_admin_columns/change_list.html:48
+#: templates/dynamic_admin_columns/grappelli/change_list.html:75
+msgid "Scope"
+msgstr "Zasięg"
+
+#: templates/dynamic_admin_columns/change_list.html:52
+#: templates/dynamic_admin_columns/grappelli/change_list.html:79
+msgid "My personal layout"
+msgstr "Mój osobisty układ"
+
+#: templates/dynamic_admin_columns/change_list.html:53
+#: templates/dynamic_admin_columns/grappelli/change_list.html:80
+msgid "Affects only your account."
+msgstr "Dotyczy wyłącznie Twojego konta."
+
+#: templates/dynamic_admin_columns/change_list.html:59
+#: templates/dynamic_admin_columns/grappelli/change_list.html:86
+msgid "Global defaults"
+msgstr "Domyślne globalne"
+
+#: templates/dynamic_admin_columns/change_list.html:60
+#: templates/dynamic_admin_columns/grappelli/change_list.html:87
+msgid "Visible to every user that has no personal layout. Superusers only."
+msgstr ""
+"Widoczne dla każdego użytkownika, który nie ma osobistego układu. Tylko dla "
+"administratorów."
+
+#: templates/dynamic_admin_columns/change_list.html:69
+#: templates/dynamic_admin_columns/grappelli/change_list.html:96
+msgid "You are viewing your personal layout. Saves apply only to your account."
+msgstr ""
+"Wyświetlasz swój osobisty układ. Zapisy dotyczą wyłącznie Twojego konta."
+
+#: templates/dynamic_admin_columns/change_list.html:76
+#: templates/dynamic_admin_columns/grappelli/change_list.html:103
+msgid "Drag rows to reorder; toggle the checkbox to show or hide a column."
+msgstr ""
+"Przeciągnij wiersze, aby zmienić kolejność; zaznacz pole, aby pokazać lub "
+"ukryć kolumnę."
+
+#: templates/dynamic_admin_columns/change_list.html:81
+#: templates/dynamic_admin_columns/grappelli/change_list.html:108
+msgid "No user-configurable columns are declared for this admin."
+msgstr ""
+"Dla tego modułu administracyjnego nie zadeklarowano kolumn możliwych do "
+"konfiguracji przez użytkownika."
+
+#: templates/dynamic_admin_columns/change_list.html:91
+#: templates/dynamic_admin_columns/grappelli/change_list.html:129
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: templates/dynamic_admin_columns/change_list.html:94
+#: templates/dynamic_admin_columns/grappelli/change_list.html:134
+msgid "Save"
+msgstr "Zapisz"

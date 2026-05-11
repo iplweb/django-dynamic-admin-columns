@@ -86,7 +86,9 @@ def save_columns(request, *, model_admin):
         return forbidden
 
     pinned = set(getattr(model_admin, "list_display_always", []))
-    valid_names = set(target_row.modeladmincolumn_set.values_list("col_name", flat=True))
+    valid_names = set(
+        target_row.modeladmincolumn_set.values_list("col_name", flat=True)
+    )
 
     seen = set()
     for index, entry in enumerate(columns, start=1):

@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "django-dynamic-admin-columns"
-version = "0.3.0"
+version = "0.4.0"
 description = "User-controllable, in-database list_display for Django admin: enable, disable and reorder columns at runtime."
 readme = "README.md"
-requires-python = ">=3.10,<3.15"
+requires-python = ">=3.11,<3.15"
 license = { file = "LICENSE" }
 authors = [
     { name = "Michał Pasternak", email = "michal.dtz@gmail.com" },
@@ -67,7 +67,16 @@ example = [
     # (the 0.4 release was published as ``run-site``; the project was
     # renamed starting in 0.5) — install from the GitHub tag.
     "django-run-site @ git+https://github.com/iplweb/django-run-site.git@v0.5.0",
-    "django-dev-helpers>=0.1.3",
+    "django-dev-helpers>=0.1.5",
+    "psycopg[binary]>=3",
+]
+example-grappelli = [
+    # Same dev stack as ``[example]`` plus django-grappelli; used by
+    # ``example_grappelli/`` to demo the picker under a third-party
+    # admin skin with a Polish-localised UI.
+    "django-grappelli>=4.0",
+    "django-run-site @ git+https://github.com/iplweb/django-run-site.git@v0.5.0",
+    "django-dev-helpers>=0.1.5",
     "psycopg[binary]>=3",
 ]
 
@@ -91,6 +100,7 @@ include = [
     "src/dynamic_admin_columns",
     "tests",
     "example",
+    "example_grappelli",
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
@@ -111,10 +121,16 @@ ignore = ["E501"]
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["DJ"]
 "example/*" = ["DJ"]
+"example_grappelli/*" = ["DJ"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["dynamic_admin_columns"]
-known-local-folder = ["tests", "library", "example_project"]
+known-local-folder = [
+    "tests",
+    "library",
+    "example_project",
+    "example_grappelli_project",
+]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"

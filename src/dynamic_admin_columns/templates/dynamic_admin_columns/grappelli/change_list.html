@@ -1,9 +1,32 @@
+{# Picker UI under django-grappelli.                                    #}
+{#                                                                      #}
+{# Mirrors ``dynamic_admin_columns/change_list.html`` but uses          #}
+{# grappelli's native idioms:                                           #}
+{#                                                                      #}
+{# * The picker anchor in ``object-tools`` carries no ``dyncol-button``  #}
+{#   class — grappelli's own ``.grp-object-tools a`` rule already gives  #}
+{#   it the round pill shape, font weight, color and border. We only    #}
+{#   add ``grp-state-focus`` to flip its default ``opacity:.5`` to 1.    #}
+{#                                                                      #}
+{# * Modal action buttons are ``<button class="grp-button">`` rather    #}
+{#   than ``<button class="dyncol-btn">``. Grappelli applies            #}
+{#   ``overflow:hidden`` and a fixed ``height:28px`` to plain           #}
+{#   ``<button>`` elements through its global reset, which would clip   #}
+{#   the labels we render — wearing the ``.grp-button`` class           #}
+{#   re-establishes a sane width and the proper Arial/12px metrics.     #}
+{#                                                                      #}
+{# JavaScript hooks (IDs ``dyncol-button``, ``dyncol-modal``,           #}
+{# ``dyncol-save``, ``dyncol-reset``, ``dyncol-status``, the            #}
+{# ``[data-dyncol-close]`` attribute and the ``dyncol-personal``       #}
+{# / ``dyncol-global`` JSON script ids) are identical to the stock     #}
+{# template so ``column-picker.js`` works unmodified.                   #}
 {% extends "admin/change_list.html" %}
 {% load i18n static %}
 
 {% block extrastyle %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'dynamic_admin_columns/column-picker.css' %}">
+<link rel="stylesheet" href="{% static 'dynamic_admin_columns/column-picker-grappelli.css' %}">
 {% endblock %}
 
 {% block extrahead %}
@@ -17,7 +40,7 @@
 <li>
     <a href="#"
        id="dyncol-button"
-       class="dyncol-button{% if dynamic_admin_columns.has_personal_layout %} dyncol-personal{% endif %}"
+       class="grp-state-focus{% if dynamic_admin_columns.has_personal_layout %} dyncol-personal{% endif %}"
        data-save-url="{{ dynamic_admin_columns.save_url }}"
        data-reset-url="{{ dynamic_admin_columns.reset_url }}"
        data-has-personal="{{ dynamic_admin_columns.has_personal_layout|yesno:'1,0' }}"
@@ -40,6 +63,10 @@
 
 <div id="dyncol-modal" class="dyncol-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dyncol-modal-title">
     <div class="dyncol-modal-backdrop" data-dyncol-close></div>
+    {# Don't apply ``.grp-module`` here — grappelli styles it as a       #}
+{# 100%-width / 960px-min-width float, which would break the modal   #}
+{# overlay's fixed sizing. The modal-content styles in                #}
+{# ``column-picker.css`` already give us a self-contained card.     #}
     <div class="dyncol-modal-content" role="document">
         <h2 id="dyncol-modal-title">{% translate "Configure columns" %}</h2>
 
@@ -82,15 +109,28 @@
             </li>
         </ul>
 
+        {# Don't add ``.grp-row`` here — grappelli styles it with        #}
+{# ``float:left; width:100%; overflow:hidden`` which would break    #}
+{# our flexbox spacer layout. We size the buttons explicitly in    #}
+{# ``column-picker-grappelli.css`` to avoid the truncation that    #}
+{# grappelli's ``button.grp-button { height:28px; overflow:hidden }``#}
+{# would otherwise impose.                                         #}
         <div class="dyncol-actions">
-            <button type="button" class="dyncol-btn dyncol-btn-reset" id="dyncol-reset" hidden>
+            <button type="button"
+                    class="grp-button dyncol-grp-reset"
+                    id="dyncol-reset"
+                    hidden>
                 {% translate "Discard personal layout" %}
             </button>
             <span class="dyncol-spacer"></span>
-            <button type="button" class="dyncol-btn dyncol-btn-cancel" data-dyncol-close>
+            <button type="button"
+                    class="grp-button dyncol-grp-cancel"
+                    data-dyncol-close>
                 {% translate "Cancel" %}
             </button>
-            <button type="button" class="dyncol-btn dyncol-btn-save" id="dyncol-save">
+            <button type="button"
+                    class="grp-button grp-default dyncol-grp-save"
+                    id="dyncol-save">
                 {% translate "Save" %}
             </button>
         </div>

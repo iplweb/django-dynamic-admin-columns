@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-05-11
+
+### Added
+
+- **django-grappelli compatibility.** `DynamicColumnsMixin` now
+  auto-detects `grappelli` in `INSTALLED_APPS` and switches its
+  changelist template to a grappelli-aware variant
+  (`dynamic_admin_columns/grappelli/change_list.html`) that renders
+  the picker pill in grappelli's `.grp-object-tools` style and the
+  modal action buttons as `grp-button` instances. A second stylesheet,
+  `column-picker-grappelli.css`, neutralises grappelli's
+  `button { height:28px; overflow:hidden }` reset (which truncated
+  long labels such as *"Przywróć globalne ustawienia z kodu"*) and
+  lets every button grow with its current label. Override
+  `DynamicColumnsMixin._change_list_template_default` /
+  `_change_list_template_grappelli` (or the
+  `change_list_template` property itself) to opt out per-admin.
+- **Second example project** (`example_grappelli/`) demonstrating the
+  picker under [django-grappelli](https://django-grappelli.readthedocs.io/)
+  with a Polish-localised UI (`LANGUAGE_CODE = "pl"`, `gettext_lazy` on
+  every field, `library/locale/pl/`). Pulled in via a new
+  `[example-grappelli]` optional-dependency group.
+- **Completed Polish translation catalog** for every picker UI string
+  — including the dynamic ones rendered by `column-picker.js` when the
+  user flips the scope radio (*Editing the global defaults…*, *Reset
+  global defaults from code*) and the confirm / error dialogs (*Reset
+  the GLOBAL defaults?…*, *Failed to save columns:*). The JavaScript
+  side now reads translations from a server-rendered JSON tag
+  (`#dyncol-i18n`) instead of `window.gettext`, so projects do not
+  have to wire up a custom `JavaScriptCatalog` URL to get localised
+  status messages.
+
 ## [0.3.0] - 2026-05-11
 
 ### Breaking
@@ -118,6 +150,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pytest-based test suite and minimal example Django project demonstrating
   end-user configuration of admin columns.
 
+[0.4.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.4.0
 [0.3.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.3.0
 [0.2.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.2.0
 [0.1.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.1.0
