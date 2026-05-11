@@ -34,15 +34,16 @@ bibliography system where it has run in production since 2022.
   out of the box, user can toggle), **allowed** (hidden by default,
   user-discoverable).
 - Per-admin and project-wide regex denylists (`list_display_forbidden`,
-  `DYNAMIC_COLUMNS_FORBIDDEN_COLUMN_NAMES`) to keep sensitive or noisy
-  fields out of the picker.
+  `DYNAMIC_ADMIN_COLUMNS_FORBIDDEN_COLUMN_NAMES`) to keep sensitive or
+  noisy fields out of the picker.
 - `"__all__"` shorthand: expose every model field and let the user pick.
 - Dictionary form of `list_select_related` that activates joins only for
   columns that are actually visible — no overhead for columns the user
   has hidden.
 - Vanilla-JS picker UI — **no SortableJS, no jQuery, no Bootstrap**.
-- Settings-gated import allowlist (`DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS`)
-  to prevent arbitrary class loading from untrusted database content.
+- Settings-gated import allowlist
+  (`DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS`) to prevent arbitrary
+  class loading from untrusted database content.
 - Polish translation included.
 
 ## Installation
@@ -59,15 +60,15 @@ Add the apps and the import allowlist to your settings:
 INSTALLED_APPS = [
     # ...
     "adminsortable2",
-    "dynamic_columns",
+    "dynamic_admin_columns",
 ]
 
-DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS = [
+DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS = [
     "myapp.admin",
 ]
 
 # Optional global regex denylist applied to every dynamic admin.
-DYNAMIC_COLUMNS_FORBIDDEN_COLUMN_NAMES = [
+DYNAMIC_ADMIN_COLUMNS_FORBIDDEN_COLUMN_NAMES = [
     r".*_cache$",
     r"^cached_.*",
 ]
@@ -80,7 +81,7 @@ SILENCED_SYSTEM_CHECKS = ["admin.E117"]
 Then run migrations:
 
 ```bash
-python manage.py migrate dynamic_columns
+python manage.py migrate dynamic_admin_columns
 ```
 
 ## Usage
@@ -88,7 +89,7 @@ python manage.py migrate dynamic_columns
 ```python
 # myapp/admin.py
 from django.contrib import admin
-from dynamic_columns.mixins import DynamicColumnsMixin
+from dynamic_admin_columns.mixins import DynamicColumnsMixin
 
 from myapp.models import Book
 
@@ -108,9 +109,25 @@ class BookAdmin(DynamicColumnsMixin, admin.ModelAdmin):
     list_display_forbidden = [r"^legacy_.*"]
 ```
 
-First time a user opens the changelist, the matching `ModelAdmin` row and
-`ModelAdminColumn` rows are created automatically. The user manages them
-from the standard "Model admin columns" admin section.
+First time a user opens the changelist, the matching `ModelAdmin` row
+and its `ModelAdminColumn` rows are created automatically as the
+**global defaults** (`user IS NULL`). Subsequent edits through the
+in-changelist *Columns* picker write to that user's **personal copy**
+(`user=<request.user>`); users without a personal copy fall back to
+the global row.
+
+### Superuser: editing global defaults
+
+A superuser sees an extra radio switch at the top of the modal:
+
+- **My personal layout** — the default. Saves create or update a
+  personal row that affects only the current user.
+- **Global defaults** — saves rewrite the `user IS NULL` row, so
+  every user without a personal layout sees the new column set on
+  their next changelist load.
+
+The accompanying *Discard personal layout* / *Reset global defaults
+from code* button operates on whichever scope is currently selected.
 
 ### Dynamic select_related
 
