@@ -138,11 +138,28 @@ python manage.py runserver
 Then visit `http://127.0.0.1:8000/admin/` and inspect the *Books* admin to
 see dynamic columns in action.
 
-## Compatibility
+## Supported versions
 
-| Python | Django |
-| ------ | ------ |
-| 3.10–3.13 | 4.2, 5.0, 5.1, 5.2 |
+### Python
+
+| Python | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 |
+|--------|------|------|------|------|------|
+|        | ✓    | ✓    | ✓    | ✓    | ✓    |
+
+### Django
+
+This package targets **actively supported** Django releases. Older
+Django versions (4.2 LTS, 5.0, 5.1) are end-of-life upstream and are
+not covered by CI. If you are still on those releases, pin
+`django-dynamic-columns < 0.2` once a 0.2 release lands; the 0.1.x
+series will keep working with whatever Django you can install.
+
+| Django  | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 | Status                                 |
+|---------|------|------|------|------|------|----------------------------------------|
+| 5.2 LTS | ✓    | ✓    | ✓    | ✓    | —    | Active LTS, extended support Apr 2028 |
+| 6.0     | —    | —    | ✓    | ✓    | ✓    | Current mainstream                     |
+
+CI exercises every ✓ cell on GitHub Actions.
 
 ## License
 
