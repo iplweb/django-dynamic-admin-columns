@@ -1,5 +1,6 @@
 """Minimal Django settings for the django-dynamic-admin-columns example project."""
 
+import importlib.util
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -7,6 +8,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "example-not-secret-do-not-deploy-this"
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
+
+# ``django-dev-helpers`` is part of the [example] optional-dependency
+# group; pulling it in is what makes ``manage.py run_site`` available.
+_DEV_HELPERS_INSTALLED = (
+    importlib.util.find_spec("django_dev_helpers") is not None
+)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -19,6 +26,8 @@ INSTALLED_APPS = [
     "dynamic_admin_columns",
     "library",
 ]
+if _DEV_HELPERS_INSTALLED:
+    INSTALLED_APPS.append("django_dev_helpers")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

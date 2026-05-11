@@ -148,17 +148,35 @@ class BookAdmin(DynamicColumnsMixin, admin.ModelAdmin):
 ## Example project
 
 A minimal Django project demonstrating the library lives in
-[`example/`](example/). Run it with:
+[`example/`](example/). Two ways to run it:
 
 ```bash
+# Plain Django — SQLite, no extras:
+uv pip install -e ".[dev]"
 cd example
 python manage.py migrate
-python manage.py createsuperuser
+python manage.py loaddata sample
 python manage.py runserver
 ```
 
-Then visit `http://127.0.0.1:8000/admin/` and inspect the *Books* admin to
-see dynamic columns in action.
+or, via [`run-site`](https://github.com/iplweb/django-run-site) +
+[`django-dev-helpers`](https://pypi.org/project/django-dev-helpers/)
+(Postgres + Redis testcontainers, autologin, recommended for
+exploration and for LLM coding agents):
+
+```bash
+uv pip install -e ".[example]"
+cd example
+uv run --no-sync python manage.py run_site
+```
+
+`run_site` spins up the containers, migrates, creates an
+`admin` / `admin` superuser and opens your browser. The
+[`example/runsite.toml`](example/runsite.toml) file configures the
+container names, the superuser credentials, and the welcome banner.
+
+See [`example/README.md`](example/README.md) for the full walk-through
+and the list of pre-loaded users.
 
 ## Supported versions
 
