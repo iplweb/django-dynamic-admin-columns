@@ -119,7 +119,7 @@ class DynamicColumnsMixin:
 
         # If the type of self.list_select_related is a list, just return it.
         # This is standard Django's ModelAdmin behavior:
-        if isinstance(self.list_select_related, (list, tuple, set)):
+        if isinstance(self.list_select_related, list | tuple | set):
             return self.list_select_related
 
         # IF the type of self.list_select_related is a dict, this means it describes
@@ -133,7 +133,7 @@ class DynamicColumnsMixin:
                 values = self.list_select_related[elem]
                 if isinstance(values, str):
                     ret.add(values)
-                elif isinstance(values, (list, set, tuple)):
+                elif isinstance(values, list | set | tuple):
                     [ret.add(_x) for _x in values]
                 else:
                     raise NotImplementedError(
