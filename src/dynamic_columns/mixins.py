@@ -1,130 +1,97 @@
+"""``DynamicColumnsMixin`` — drop-in mixin for Django ``ModelAdmin`` classes."""
+
 from functools import cached_property
 
-from dynamic_columns.models import ModelAdmin
+from django.urls import path
 
-# TODO: 1) checks for list_display_always (czy kolumna istnieje)
+from dynamic_columns import views
+from dynamic_columns.models import ModelAdmin
+from dynamic_columns.util import qual
 
 
 class DynamicColumnsMixin:
-    """This is a mixin you use in your ModelAdmin class.
+    """Make a ``ModelAdmin``'s column layout user-configurable at runtime.
 
-    It enables the ModelAdmin to:
+    The mixin adds three declarative attributes that complement Django's
+    own ``list_display``:
 
-    1) automatically create its in-database representation (``ModelAdmin`` model),
+    * ``list_display_always`` — columns that are *always* visible. They
+      are not stored in the database and cannot be moved or toggled by
+      end-users. Use this for primary identifiers.
+    * ``list_display_default`` — columns visible out of the box. The
+      user can hide them or change their position.
+    * ``list_display_allowed`` — columns hidden by default but
+      discoverable from the picker. Useful for power-user fields.
+    * ``list_display_forbidden`` — list of regular expressions; matching
+      column names are silently dropped (per-admin denylist).
 
-    2) basing on this mixin settings, it creates a list of columns in-database
-       (``ModelAdminColumn`` instances) thus giving the end-user ability to enable or disable
-       them,
+    Visible columns also feed a smarter ``get_list_select_related``:
+    when ``list_select_related`` is a *dict* keyed by column name the
+    JOINs follow column visibility, so a hidden column doesn't pay its
+    join cost.
 
-    3) keeps a list of "forbidden" columns, eg. columns that should never be visible.
+    The mixin also injects a "Columns" object-tool into the changelist
+    that opens a modal picker where the logged-in user can toggle and
+    reorder columns. Personal layouts are stored per-user; users
+    without a personal layout see the global defaults.
     """
 
-    # ``list_display_always``
-    #
-    # this is a list of always-displayed columns. Those columns are displayed
-    # first in the list view of Django's Admin, they cannot be enabled or disabled,
-    # they cannot be moved. This does what the "old" ``list_display`` did:
-
-    # list_display_always = []
-
-    # ``list_display_default``
-    #
-    # this is a list of columns enabled by default, that can be moved or
-    # disabled (hidden) via admin interface at some point later. Here one can
-    # give the end-user a reasonable selection of initially visible columns:
-
-    # list_display_default = []
-
-    # ``list_display_allowed``
-    #
-    # this is a list of columns not enabled by default, but they can be enabled
-    # in the admin later:
-
-    # list_display_allowed = []
-
-    # ``list_display_forbidden``
-    #
-    # You can use "__all__" string in above variables if you want to give the
-    # user access to all the attributes of the model to be used as columns
-    # in the admin; this way user can decide what the user wants. But the
-    # column selection could be too broad. We use ``list_display_forbidden``
-    # to avoid some columns.
-    #
-    # This is a list of columns that are forbidden - those columns should not
-    # appear in database, and even if they do - they should not be allowed to be
-    # displayed.
-    #
-    # ``list_display_forbidden`` is in fact a list of regex that will be matched
-    # against column names.
-
-    # list_display_forbidden = []
-
-    # ``list_select_related``
-    #
-    # It becomes a dictionary now! Unless this code becomes Django's mainstream,
-    # please ignore system check ``admin.E117`` -- add the line below to ``settings.py``
-    #
-    #   SILENCED_SYSTEM_CHECKS = ["admin.E117"]
-    #
-    # Example ``list_select_related`` below:
-    #
-    #     list_select_related = {
-    #         "__always__": ["some", "columns"],
-    #         "some_other_column": [
-    #             "some_other_column",
-    #         ],
-    #         "admin_callable": ["another_column", "maybe_more"],
-    #     }
+    change_list_template = "dynamic_columns/change_list.html"
 
     @cached_property
     def _modeladmin_enabled(self):
         return ModelAdmin.objects.enable(self)
 
+    def get_urls(self):
+        urls = super().get_urls()
+        opts = self.model._meta
+        prefix = f"{opts.app_label}_{opts.model_name}"
+        extra = [
+            path(
+                "dynamic-columns/save/",
+                self.admin_site.admin_view(self._dyncol_save_view),
+                name=f"{prefix}_dyncol_save",
+            ),
+            path(
+                "dynamic-columns/reset/",
+                self.admin_site.admin_view(self._dyncol_reset_view),
+                name=f"{prefix}_dyncol_reset",
+            ),
+        ]
+        return extra + urls
+
+    def _dyncol_save_view(self, request):
+        return views.save_columns(request, model_admin=self)
+
+    def _dyncol_reset_view(self, request):
+        return views.reset_columns(request, model_admin=self)
+
+    def _dyncol_effective_row(self, request):
+        # Initialise the global row (no-op after first call) so its
+        # columns are always available as the fallback.
+        global_row = self._modeladmin_enabled  # noqa: F841
+
+        user = getattr(request, "user", None) if request is not None else None
+        return ModelAdmin.objects.db_repr_for_user(self, user)
+
     def get_list_display(self, request):
-        ret = self._modeladmin_enabled
-        return ret.get_list_display(model_admin=self, request=request)
+        effective = self._dyncol_effective_row(request)
+        return effective.get_list_display(model_admin=self, request=request)
 
     def get_list_select_related(self, request):
+        """Honour ``list_select_related = {col_name: [related_field, ...]}``.
+
+        Each key is matched against the *currently visible* columns; the
+        special key ``"__always__"`` is unconditional. Lists, tuples and
+        sets pass through unchanged for compatibility with vanilla
+        Django.
         """
-        As DynamicColumnsMixin allowed Django to display variable number of columns,
-        the ``list_select_related`` attribute can be also dynamic. Why use ``select_related``
-        with a column name, if that column was disabled by the end-user?
-
-        DynamicColumnsMixin assumes, that ``list_select_related`` can be also a dictionary.
-        If you define it as one, unless this code becomes Django's mainstream,
-        please ignore system check ``admin.E117`` -- add the line below to ``settings.py``
-
-            SILENCED_SYSTEM_CHECKS = ["admin.E117"]
-
-        Example ``list_select_related`` below:
-
-            list_select_related = {
-                "__always__": ["some", "columns"],
-                "some_other_column": [
-                    "some_other_column",
-                ],
-                "admin_callable": ["another_column", "maybe_more"],
-            }
-
-        The key ``__always__`` is special -- it contains the columns that will be always
-        returned by DynamicColumnsMixin.get_select_related. Think about it as
-        "old list_select_related".
-        """
-
-        # Django's default for ``list_select_related`` is ``False`` (with
-        # ``True`` meaning "select_related on every FK"). Pass either of
-        # those through so the admin behaves like a vanilla ModelAdmin.
         if isinstance(self.list_select_related, bool):
             return self.list_select_related
 
-        # If the type of self.list_select_related is a list, just return it.
-        # This is standard Django's ModelAdmin behavior:
         if isinstance(self.list_select_related, list | tuple | set):
             return self.list_select_related
 
-        # IF the type of self.list_select_related is a dict, this means it describes
-        # a mapping between a column name (and this column may or may not be visible)
-        # and it's select_related name.
         columns = self.get_list_display(request)
 
         ret = set()
@@ -134,9 +101,60 @@ class DynamicColumnsMixin:
                 if isinstance(values, str):
                     ret.add(values)
                 elif isinstance(values, list | set | tuple):
-                    [ret.add(_x) for _x in values]
+                    for value in values:
+                        ret.add(value)
                 else:
                     raise NotImplementedError(
-                        f"Handling of values of type {type(values)} not implemented"
+                        f"Handling of values of type {type(values)} " "not implemented"
                     )
         return ret
+
+    def changelist_view(self, request, extra_context=None):
+        from django.urls import reverse
+
+        effective = self._dyncol_effective_row(request)
+
+        pinned = set(getattr(self, "list_display_always", []))
+        rows = [
+            {
+                "col_name": col.col_name,
+                "verbose_name": self._dyncol_verbose_name(col.col_name),
+                "enabled": col.enabled,
+                "ordering": col.ordering,
+            }
+            for col in effective.modeladmincolumn_set.exclude(
+                col_name__in=pinned
+            ).order_by("ordering")
+        ]
+
+        opts = self.model._meta
+        prefix = f"admin:{opts.app_label}_{opts.model_name}"
+
+        ctx = extra_context or {}
+        ctx["dynamic_columns"] = {
+            "class_name": qual(self.__class__),
+            "columns": rows,
+            "save_url": reverse(f"{prefix}_dyncol_save"),
+            "reset_url": reverse(f"{prefix}_dyncol_reset"),
+            "has_personal_layout": (
+                effective.user_id is not None and effective.user_id == request.user.pk
+            ),
+        }
+        return super().changelist_view(request, extra_context=ctx)
+
+    def _dyncol_verbose_name(self, col_name):
+        """Resolve a human-readable label for *col_name* in the picker."""
+        from django.core.exceptions import FieldDoesNotExist
+
+        try:
+            field = self.model._meta.get_field(col_name)
+        except FieldDoesNotExist:
+            callable_ = getattr(self, col_name, None)
+            if callable_ is not None and callable(callable_):
+                return getattr(callable_, "short_description", col_name)
+            return col_name
+
+        verbose = getattr(field, "verbose_name", None)
+        if verbose and verbose != col_name:
+            return verbose
+        return col_name

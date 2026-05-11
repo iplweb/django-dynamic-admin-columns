@@ -8,6 +8,7 @@ class Book(models.Model):
     pages = models.PositiveIntegerField("Pages", default=0)
     notes = models.TextField("Notes", blank=True, default="")
     published_on = models.DateField("Published on", null=True, blank=True)
+    language = models.CharField("Language", max_length=8, blank=True, default="")
 
     class Meta:
         ordering = ("title",)

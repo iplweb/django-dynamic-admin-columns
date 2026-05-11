@@ -1,0 +1,95 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "username": "alice",
+            "first_name": "Alice",
+            "last_name": "Example",
+            "email": "alice@example.com",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "password": "pbkdf2_sha256$1200000$jiNnoHVS0Mp0PVbLrloUAx$JZR0Kf73Fe2f5nPWcPe2i5sXu2QnCJuWAt2MXswKD7c="
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "username": "bob",
+            "first_name": "Bob",
+            "last_name": "Example",
+            "email": "bob@example.com",
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "password": "pbkdf2_sha256$1200000$asa0yrgDz4RAyKvz96Vug7$L8wd7QokQVd15IDauewLmI4YyPf4qGfcqJTeeWpnnss="
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 1,
+        "fields": {
+            "title": "The Pragmatic Programmer",
+            "author": "Andy Hunt, Dave Thomas",
+            "isbn": "9780201616224",
+            "pages": 352,
+            "notes": "Classic on professional software craftsmanship.",
+            "published_on": "1999-10-30",
+            "language": "en"
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 2,
+        "fields": {
+            "title": "Refactoring",
+            "author": "Martin Fowler",
+            "isbn": "9780201485677",
+            "pages": 431,
+            "notes": "Patterns and techniques to improve code structure.",
+            "published_on": "1999-07-08",
+            "language": "en"
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 3,
+        "fields": {
+            "title": "Domain-Driven Design",
+            "author": "Eric Evans",
+            "isbn": "9780321125217",
+            "pages": 560,
+            "notes": "Tackling complexity in the heart of software.",
+            "published_on": "2003-08-22",
+            "language": "en"
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 4,
+        "fields": {
+            "title": "Clean Code",
+            "author": "Robert C. Martin",
+            "isbn": "9780132350884",
+            "pages": 464,
+            "notes": "Handbook of agile software craftsmanship.",
+            "published_on": "2008-08-01",
+            "language": "en"
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 5,
+        "fields": {
+            "title": "Working Effectively with Legacy Code",
+            "author": "Michael Feathers",
+            "isbn": "9780131177055",
+            "pages": 456,
+            "notes": "How to tame untested production code.",
+            "published_on": "2004-09-22",
+            "language": "en"
+        }
+    }
+]

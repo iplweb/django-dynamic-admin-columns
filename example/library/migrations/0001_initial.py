@@ -41,6 +41,12 @@ class Migration(migrations.Migration):
                         blank=True, null=True, verbose_name="Published on"
                     ),
                 ),
+                (
+                    "language",
+                    models.CharField(
+                        blank=True, default="", max_length=8, verbose_name="Language"
+                    ),
+                ),
             ],
             options={
                 "verbose_name": "Book",

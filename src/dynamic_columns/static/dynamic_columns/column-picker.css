@@ -1,0 +1,176 @@
+/*
+ * django-dynamic-columns — column picker UI.
+ *
+ * Matches Django admin's default visual language (#79aec8 accent, sans
+ * font, modest border radius). Self-contained — no Bootstrap, no jQuery
+ * UI, no SortableJS.
+ */
+
+.dyncol-button {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #79aec8;
+    color: #fff !important;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.dyncol-button:hover,
+.dyncol-button:focus {
+    background: #5b94b1;
+    color: #fff !important;
+}
+.dyncol-button.dyncol-personal {
+    background: #417690;
+}
+
+.dyncol-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dyncol-modal[hidden] {
+    display: none;
+}
+
+.dyncol-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.dyncol-modal-content {
+    position: relative;
+    background: #fff;
+    color: #222;
+    width: min(520px, 92vw);
+    max-height: 80vh;
+    overflow: auto;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+
+.dyncol-modal-content h2 {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+    color: #417690;
+}
+
+.dyncol-help {
+    margin: 0 0 16px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.dyncol-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+}
+
+.dyncol-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    background: #fafafa;
+    cursor: grab;
+    user-select: none;
+}
+.dyncol-item:last-child {
+    border-bottom: 0;
+}
+.dyncol-item:hover {
+    background: #f0f6fa;
+}
+.dyncol-item.dyncol-dragging {
+    opacity: 0.45;
+    background: #cfe4f1;
+}
+.dyncol-item.dyncol-drop-target {
+    border-top: 2px solid #417690;
+}
+
+.dyncol-handle {
+    color: #888;
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: grab;
+}
+
+.dyncol-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    margin: 0;
+}
+.dyncol-label input[type="checkbox"] {
+    margin: 0;
+}
+
+.dyncol-colname {
+    color: #999;
+    font-size: 0.78rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.dyncol-empty {
+    padding: 14px;
+    color: #888;
+    font-style: italic;
+    text-align: center;
+}
+
+.dyncol-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.dyncol-spacer {
+    flex: 1;
+}
+
+.dyncol-btn {
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    background: #f5f5f5;
+    color: #222;
+    cursor: pointer;
+    font: inherit;
+}
+.dyncol-btn:hover {
+    background: #e8e8e8;
+}
+.dyncol-btn-save {
+    background: #417690;
+    color: #fff;
+    border-color: #417690;
+}
+.dyncol-btn-save:hover {
+    background: #2f5f74;
+}
+.dyncol-btn-reset {
+    background: #fff;
+    color: #b94a48;
+    border-color: #b94a48;
+}
+.dyncol-btn-reset:hover {
+    background: #b94a48;
+    color: #fff;
+}
+.dyncol-btn-cancel {
+    background: #fff;
+    border-color: #ccc;
+}

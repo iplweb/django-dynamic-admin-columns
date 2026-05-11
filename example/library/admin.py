@@ -14,4 +14,4 @@ class BookAdmin(DynamicColumnsMixin, admin.ModelAdmin):
     list_display_default = ["author", "isbn"]
 
     # Hidden by default. The user can enable them.
-    list_display_allowed = ["pages", "notes", "published_on"]
+    list_display_allowed = ["pages", "notes", "published_on", "language"]

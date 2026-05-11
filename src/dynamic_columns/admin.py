@@ -7,7 +7,7 @@ from django.contrib.admin.utils import NotRelationField, get_model_from_relation
 from django.core.exceptions import FieldDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
-from dynamic_columns.models import ModelAdminColumn
+from dynamic_columns.models import ModelAdmin, ModelAdminColumn
 
 
 @admin.action(description=_("Enable selected columns"))
@@ -18,6 +18,14 @@ def make_enabled(modeladmin, request, queryset):
 @admin.action(description=_("Disable selected columns"))
 def make_disabled(modeladmin, request, queryset):
     queryset.update(enabled=False)
+
+
+@admin.register(ModelAdmin)
+class ModelAdminAdmin(DjangoModelAdmin):
+    list_display = ["class_name", "model_ref", "user"]
+    list_filter = [("user", admin.EmptyFieldListFilter), "model_ref"]
+    search_fields = ["class_name", "user__username"]
+    readonly_fields = ["class_name", "model_ref"]
 
 
 @admin.register(ModelAdminColumn)

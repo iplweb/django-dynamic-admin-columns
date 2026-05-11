@@ -23,8 +23,13 @@ bibliography system where it has run in production since 2022.
 ## Features
 
 - Drop-in `DynamicColumnsMixin` for any `ModelAdmin`.
-- Per-`ModelAdmin` column registry stored in the database — survives
-  restarts, deploys, and code changes.
+- **In-changelist picker.** A *Columns* button in the standard
+  `object-tools` area opens a modal where end-users toggle columns and
+  reorder them via drag-and-drop — no admin training, no separate
+  preferences page.
+- **Per-user layouts.** Each staff user keeps their own column
+  configuration; users without a personal layout fall back to the
+  global defaults. Resetting is one click away.
 - Three column tiers: **always** (pinned, code-only), **default** (visible
   out of the box, user can toggle), **allowed** (hidden by default,
   user-discoverable).
@@ -35,7 +40,7 @@ bibliography system where it has run in production since 2022.
 - Dictionary form of `list_select_related` that activates joins only for
   columns that are actually visible — no overhead for columns the user
   has hidden.
-- Admin-side reordering via `django-admin-sortable2`.
+- Vanilla-JS picker UI — **no SortableJS, no jQuery, no Bootstrap**.
 - Settings-gated import allowlist (`DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS`)
   to prevent arbitrary class loading from untrusted database content.
 - Polish translation included.
