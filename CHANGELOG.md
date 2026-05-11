@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-05-11
+
+### Breaking
+
+- **Renamed Python module and Django app label** from
+  `dynamic_columns` to `dynamic_admin_columns` for naming consistency
+  with the published PyPI distribution `django-dynamic-admin-columns`.
+  Update imports:
+
+  ```python
+  from dynamic_admin_columns.mixins import DynamicColumnsMixin
+  ```
+
+  Use `"dynamic_admin_columns"` in `INSTALLED_APPS`.
+- **Renamed settings constants**:
+  `DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS` →
+  `DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS` and
+  `DYNAMIC_COLUMNS_FORBIDDEN_COLUMN_NAMES` →
+  `DYNAMIC_ADMIN_COLUMNS_FORBIDDEN_COLUMN_NAMES`.
+
+### Notes
+
+- On-disk DB table names stay as `dynamic_columns_modeladmin` /
+  `dynamic_columns_modeladmincolumn` via `Meta.db_table`, so existing
+  data carries over without any SQL migration. Only the Python import
+  path and the settings constant names change.
+
+### Added
+
+- Superuser-only **"Global defaults"** scope in the column picker.
+  Staff users without `is_superuser` see only the *My personal layout*
+  tab; superusers see a radio switch that lets them save changes
+  either as their personal copy or as the global default visible to
+  every user without one. The matching *Discard* / *Reset* button
+  operates on whichever scope is currently selected.
+
 ## [0.2.0] - 2026-05-11
 
 ### Added
@@ -82,5 +118,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pytest-based test suite and minimal example Django project demonstrating
   end-user configuration of admin columns.
 
+[0.3.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.3.0
 [0.2.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.2.0
 [0.1.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.1.0
