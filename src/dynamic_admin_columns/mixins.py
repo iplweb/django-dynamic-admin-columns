@@ -4,9 +4,9 @@ from functools import cached_property
 
 from django.urls import path
 
-from dynamic_columns import views
-from dynamic_columns.models import ModelAdmin
-from dynamic_columns.util import qual
+from dynamic_admin_columns import views
+from dynamic_admin_columns.models import ModelAdmin
+from dynamic_admin_columns.util import qual
 
 
 class DynamicColumnsMixin:
@@ -36,7 +36,7 @@ class DynamicColumnsMixin:
     without a personal layout see the global defaults.
     """
 
-    change_list_template = "dynamic_columns/change_list.html"
+    change_list_template = "dynamic_admin_columns/change_list.html"
 
     @cached_property
     def _modeladmin_enabled(self):
@@ -113,32 +113,42 @@ class DynamicColumnsMixin:
         from django.urls import reverse
 
         effective = self._dyncol_effective_row(request)
+        global_row = self._modeladmin_enabled
 
         pinned = set(getattr(self, "list_display_always", []))
-        rows = [
-            {
-                "col_name": col.col_name,
-                "verbose_name": self._dyncol_verbose_name(col.col_name),
-                "enabled": col.enabled,
-                "ordering": col.ordering,
-            }
-            for col in effective.modeladmincolumn_set.exclude(
-                col_name__in=pinned
-            ).order_by("ordering")
-        ]
+
+        def rows_for(row):
+            return [
+                {
+                    "col_name": col.col_name,
+                    "verbose_name": self._dyncol_verbose_name(col.col_name),
+                    "enabled": col.enabled,
+                    "ordering": col.ordering,
+                }
+                for col in row.modeladmincolumn_set.exclude(
+                    col_name__in=pinned
+                ).order_by("ordering")
+            ]
 
         opts = self.model._meta
         prefix = f"admin:{opts.app_label}_{opts.model_name}"
 
+        has_personal = (
+            effective.user_id is not None
+            and effective.user_id == request.user.pk
+        )
+
         ctx = extra_context or {}
-        ctx["dynamic_columns"] = {
+        ctx["dynamic_admin_columns"] = {
             "class_name": qual(self.__class__),
-            "columns": rows,
+            # Always provide both column sets — JS swaps between them
+            # based on the radio. Non-superusers only ever see "personal".
+            "personal_columns": rows_for(effective),
+            "global_columns": rows_for(global_row),
             "save_url": reverse(f"{prefix}_dyncol_save"),
             "reset_url": reverse(f"{prefix}_dyncol_reset"),
-            "has_personal_layout": (
-                effective.user_id is not None and effective.user_id == request.user.pk
-            ),
+            "has_personal_layout": has_personal,
+            "is_superuser": bool(request.user.is_superuser),
         }
         return super().changelist_view(request, extra_context=ctx)
 

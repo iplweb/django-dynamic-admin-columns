@@ -1,4 +1,4 @@
-"""Minimal Django settings for the django-dynamic-columns example project."""
+"""Minimal Django settings for the django-dynamic-admin-columns example project."""
 
 from pathlib import Path
 
@@ -16,7 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "adminsortable2",
-    "dynamic_columns",
+    "dynamic_admin_columns",
     "library",
 ]
 
@@ -67,17 +67,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 SILENCED_SYSTEM_CHECKS = ["admin.E117"]
 
 # ----------------------------------------------------------------------
-# django-dynamic-columns configuration
+# django-dynamic-admin-columns configuration
 # ----------------------------------------------------------------------
 # Only ModelAdmin classes whose dotted import path starts with one of the
 # following prefixes can be loaded back from the database. This protects
 # the project from arbitrary class loading via tampered DB rows.
-DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS = [
+DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS = [
     "library.admin",
 ]
 
 # Project-wide regex denylist applied to every dynamic admin.
-DYNAMIC_COLUMNS_FORBIDDEN_COLUMN_NAMES = [
+DYNAMIC_ADMIN_COLUMNS_FORBIDDEN_COLUMN_NAMES = [
     r".*_cache$",
     r"^cached_.*",
 ]

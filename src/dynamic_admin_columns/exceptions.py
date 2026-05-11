@@ -3,7 +3,7 @@ class CodeAccessNotAllowed(Exception):
     path that is not explictly allowed.
 
     The way it works:
-    * you should put ``DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS`` setting in your settings.py,
+    * you should put ``DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS`` setting in your settings.py,
       it should be a list of admin modules, that are allowed to be imported from module names
       stored inside database
     * if database wants to import a module that is not in this path, like instead importing

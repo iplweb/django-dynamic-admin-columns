@@ -1,9 +1,9 @@
-# django-dynamic-columns
+# django-dynamic-admin-columns
 
-[![PyPI](https://img.shields.io/pypi/v/django-dynamic-columns.svg)](https://pypi.org/project/django-dynamic-columns/)
-[![Python versions](https://img.shields.io/pypi/pyversions/django-dynamic-columns.svg)](https://pypi.org/project/django-dynamic-columns/)
-[![License](https://img.shields.io/pypi/l/django-dynamic-columns.svg)](https://github.com/iplweb/django-dynamic-columns/blob/main/LICENSE)
-[![Tests](https://github.com/iplweb/django-dynamic-columns/actions/workflows/tests.yml/badge.svg)](https://github.com/iplweb/django-dynamic-columns/actions/workflows/tests.yml)
+[![PyPI](https://img.shields.io/pypi/v/django-dynamic-admin-columns.svg)](https://pypi.org/project/django-dynamic-admin-columns/)
+[![Python versions](https://img.shields.io/pypi/pyversions/django-dynamic-admin-columns.svg)](https://pypi.org/project/django-dynamic-admin-columns/)
+[![License](https://img.shields.io/pypi/l/django-dynamic-admin-columns.svg)](https://github.com/iplweb/django-dynamic-admin-columns/blob/main/LICENSE)
+[![Tests](https://github.com/iplweb/django-dynamic-admin-columns/actions/workflows/tests.yml/badge.svg)](https://github.com/iplweb/django-dynamic-admin-columns/actions/workflows/tests.yml)
 
 **User-controllable, in-database `list_display` for Django admin.** End-users
 enable, disable and reorder columns at runtime through the admin itself — no
@@ -48,9 +48,9 @@ bibliography system where it has run in production since 2022.
 ## Installation
 
 ```bash
-uv add django-dynamic-columns
+uv add django-dynamic-admin-columns
 # or
-pip install django-dynamic-columns
+pip install django-dynamic-admin-columns
 ```
 
 Add the apps and the import allowlist to your settings:
@@ -156,7 +156,7 @@ see dynamic columns in action.
 This package targets **actively supported** Django releases. Older
 Django versions (4.2 LTS, 5.0, 5.1) are end-of-life upstream and are
 not covered by CI. If you are still on those releases, pin
-`django-dynamic-columns < 0.2` once a 0.2 release lands; the 0.1.x
+`django-dynamic-admin-columns < 0.2` once a 0.2 release lands; the 0.1.x
 series will keep working with whatever Django you can install.
 
 | Django  | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 | Status                                 |

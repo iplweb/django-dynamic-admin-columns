@@ -1,10 +1,10 @@
-"""Tests for ``dynamic_columns.mixins.DynamicColumnsMixin``."""
+"""Tests for ``dynamic_admin_columns.mixins.DynamicColumnsMixin``."""
 
 import pytest
 from django.contrib.admin import ModelAdmin as DjangoModelAdmin
 
-from dynamic_columns.mixins import DynamicColumnsMixin
-from dynamic_columns.models import ModelAdmin
+from dynamic_admin_columns.mixins import DynamicColumnsMixin
+from dynamic_admin_columns.models import ModelAdmin
 
 
 @pytest.mark.django_db
@@ -32,7 +32,7 @@ def test_mixin_get_list_select_related_returns_list_unchanged():
 
 @pytest.mark.django_db
 def test_mixin_get_list_select_related_filters_dict_by_visible_columns(settings):
-    settings.DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS = [
+    settings.DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS = [
         "tests.testapp.admin",
         "tests.test_mixins",
     ]
@@ -67,7 +67,7 @@ def test_mixin_works_when_list_display_unchanged_but_list_display_always_set(
     from persisted columns (otherwise we'd end up with ``__str__`` in
     the database)."""
 
-    settings.DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS = ["tests.test_mixins"]
+    settings.DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS = ["tests.test_mixins"]
 
     from tests.testapp.models import Book
 

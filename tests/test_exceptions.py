@@ -1,6 +1,6 @@
 import pytest
 
-from dynamic_columns.exceptions import CodeAccessNotAllowed
+from dynamic_admin_columns.exceptions import CodeAccessNotAllowed
 
 
 def test_code_access_not_allowed_is_raisable():

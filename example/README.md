@@ -1,7 +1,7 @@
-# django-dynamic-columns — example project
+# django-dynamic-admin-columns — example project
 
 A minimal Django 5 project demonstrating user-controllable admin
-columns through `django-dynamic-columns`. Run it, log in as either of
+columns through `django-dynamic-admin-columns`. Run it, log in as either of
 two pre-baked users and watch how each user keeps their **own** column
 layout for the same `BookAdmin`.
 

@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 
 @pytest.fixture(autouse=True)
-def reset_dynamic_columns_admin_cache():
+def reset_dynamic_admin_columns_admin_cache():
     """Drop cached ``_modeladmin_enabled`` on every registered admin.
 
     Admin instances are module-level singletons, so the

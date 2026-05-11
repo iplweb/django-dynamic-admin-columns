@@ -11,19 +11,19 @@ from django.utils.datastructures import OrderedSet
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from dynamic_columns.exceptions import CodeAccessNotAllowed
-from dynamic_columns.util import qual, str_to_class
+from dynamic_admin_columns.exceptions import CodeAccessNotAllowed
+from dynamic_admin_columns.util import qual, str_to_class
 
 
 def _check_allowed(cname: str, *, target: str = "settings.py") -> None:
     """Raise :class:`CodeAccessNotAllowed` if *cname* is not whitelisted."""
-    for path in getattr(settings, "DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS", []):
+    for path in getattr(settings, "DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS", []):
         if cname.startswith(path):
             return
     raise CodeAccessNotAllowed(
         f"Please add {cname} to your project's {target} if you want to "
         f"use DynamicColumnsMixin for that ModelAdmin class -- "
-        f"add it to a list ``DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS``."
+        f"add it to a list ``DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS``."
     )
 
 
@@ -116,7 +116,7 @@ class ModelAdminManager(models.Manager):
 
         forbidden_columns_patterns = getattr(
             model_admin, "list_display_forbidden", []
-        ) + getattr(settings, "DYNAMIC_COLUMNS_FORBIDDEN_COLUMN_NAMES", [])
+        ) + getattr(settings, "DYNAMIC_ADMIN_COLUMNS_FORBIDDEN_COLUMN_NAMES", [])
 
         list_display_always = getattr(model_admin, "list_display_always", [])
 
@@ -189,6 +189,14 @@ class ModelAdmin(models.Model):
     objects = ModelAdminManager()
 
     class Meta:
+        # ``db_table`` stays at the historical name so deployments that
+        # came from the pre-extraction BPP fork (where this app was an
+        # in-tree ``dynamic_columns``) continue to read the existing
+        # rows after upgrading without any schema migration. The
+        # Python module / Django app label is the modern
+        # ``dynamic_admin_columns``; the on-disk table name is an
+        # internal implementation detail.
+        db_table = "dynamic_columns_modeladmin"
         constraints = [
             models.UniqueConstraint(
                 fields=["class_name", "model_ref"],
@@ -255,6 +263,7 @@ class ModelAdminColumn(models.Model):
     ordering = models.PositiveSmallIntegerField(verbose_name=_("Ordering"))
 
     class Meta:
+        db_table = "dynamic_columns_modeladmincolumn"
         unique_together = [("parent", "col_name")]
         ordering = ("parent", "ordering")
         verbose_name = _("Model admin column")

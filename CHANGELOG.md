@@ -82,5 +82,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pytest-based test suite and minimal example Django project demonstrating
   end-user configuration of admin columns.
 
-[0.2.0]: https://github.com/iplweb/django-dynamic-columns/releases/tag/v0.2.0
-[0.1.0]: https://github.com/iplweb/django-dynamic-columns/releases/tag/v0.1.0
+[0.2.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.2.0
+[0.1.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.1.0

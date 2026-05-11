@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "django-dynamic-columns"
+name = "django-dynamic-admin-columns"
 version = "0.2.0"
 description = "User-controllable, in-database list_display for Django admin: enable, disable and reorder columns at runtime."
 readme = "README.md"
@@ -57,17 +57,17 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/iplweb/django-dynamic-columns"
-Repository = "https://github.com/iplweb/django-dynamic-columns"
-Issues = "https://github.com/iplweb/django-dynamic-columns/issues"
-Changelog = "https://github.com/iplweb/django-dynamic-columns/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/iplweb/django-dynamic-admin-columns"
+Repository = "https://github.com/iplweb/django-dynamic-admin-columns"
+Issues = "https://github.com/iplweb/django-dynamic-admin-columns/issues"
+Changelog = "https://github.com/iplweb/django-dynamic-admin-columns/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/dynamic_columns"]
+packages = ["src/dynamic_admin_columns"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "src/dynamic_columns",
+    "src/dynamic_admin_columns",
     "tests",
     "example",
     "README.md",
@@ -80,7 +80,7 @@ include = [
 line-length = 88
 target-version = "py310"
 extend-exclude = [
-    "src/dynamic_columns/migrations",
+    "src/dynamic_admin_columns/migrations",
 ]
 
 [tool.ruff.lint]
@@ -92,7 +92,7 @@ ignore = ["E501"]
 "example/*" = ["DJ"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["dynamic_columns"]
+known-first-party = ["dynamic_admin_columns"]
 known-local-folder = ["tests", "library", "example_project"]
 
 [tool.pytest.ini_options]

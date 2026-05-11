@@ -1,8 +1,8 @@
-"""Tests for ``dynamic_columns.util``."""
+"""Tests for ``dynamic_admin_columns.util``."""
 
 import pytest
 
-from dynamic_columns.util import qual, str_to_class
+from dynamic_admin_columns.util import qual, str_to_class
 
 
 def test_qual_returns_full_import_path():
@@ -12,9 +12,9 @@ def test_qual_returns_full_import_path():
 
 
 def test_qual_with_local_class():
-    from dynamic_columns.models import ModelAdmin
+    from dynamic_admin_columns.models import ModelAdmin
 
-    assert qual(ModelAdmin) == "dynamic_columns.models.ModelAdmin"
+    assert qual(ModelAdmin) == "dynamic_admin_columns.models.ModelAdmin"
 
 
 def test_str_to_class_returns_class_object():

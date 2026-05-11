@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from dynamic_columns.mixins import DynamicColumnsMixin
+from dynamic_admin_columns.mixins import DynamicColumnsMixin
 
 from library.models import Book
 

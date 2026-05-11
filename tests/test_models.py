@@ -1,11 +1,11 @@
-"""Tests for ``dynamic_columns.models``."""
+"""Tests for ``dynamic_admin_columns.models``."""
 
 import pytest
 from django.contrib.contenttypes.models import ContentType
 from django.db import IntegrityError
 
-from dynamic_columns.exceptions import CodeAccessNotAllowed
-from dynamic_columns.models import ModelAdmin, ModelAdminColumn
+from dynamic_admin_columns.exceptions import CodeAccessNotAllowed
+from dynamic_admin_columns.models import ModelAdmin, ModelAdminColumn
 
 
 @pytest.mark.django_db
@@ -41,7 +41,7 @@ def test_modeladmin_column_unique_constraint():
 
 @pytest.mark.django_db
 def test_class_ref_raises_for_unauthorized_path(settings):
-    settings.DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS = ["only.this.module"]
+    settings.DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS = ["only.this.module"]
 
     ct = ContentType.objects.first()
     ma = ModelAdmin.objects.create(class_name="unauthorized.path.Admin", model_ref=ct)
@@ -52,7 +52,7 @@ def test_class_ref_raises_for_unauthorized_path(settings):
 
 @pytest.mark.django_db
 def test_db_repr_requires_allowed_import_path(settings):
-    settings.DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS = ["nowhere"]
+    settings.DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS = ["nowhere"]
 
     from tests.testapp.admin import BookAdmin
     from tests.testapp.models import Book
@@ -118,7 +118,7 @@ def test_get_list_display_returns_always_then_enabled_only():
 @pytest.mark.django_db
 def test_all_keyword_expands_to_all_model_fields(settings):
     """When a ModelAdmin uses ``"__all__"`` it should pull all non-forbidden fields."""
-    settings.DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS = ["tests.test_models"]
+    settings.DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS = ["tests.test_models"]
 
     from django.contrib.admin import ModelAdmin as DjangoModelAdmin
 

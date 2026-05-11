@@ -16,7 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "adminsortable2",
-    "dynamic_columns",
+    "dynamic_admin_columns",
     "tests.testapp",
 ]
 
@@ -59,10 +59,10 @@ STATIC_URL = "/static/"
 
 SILENCED_SYSTEM_CHECKS = ["admin.E117"]
 
-DYNAMIC_COLUMNS_ALLOWED_IMPORT_PATHS = [
+DYNAMIC_ADMIN_COLUMNS_ALLOWED_IMPORT_PATHS = [
     "tests.testapp.admin",
 ]
 
-DYNAMIC_COLUMNS_FORBIDDEN_COLUMN_NAMES = [
+DYNAMIC_ADMIN_COLUMNS_FORBIDDEN_COLUMN_NAMES = [
     r"^_internal_.*",
 ]

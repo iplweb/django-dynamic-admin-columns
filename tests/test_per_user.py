@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
-from dynamic_columns.models import ModelAdmin
+from dynamic_admin_columns.models import ModelAdmin
 
 
 @pytest.fixture
@@ -302,10 +302,19 @@ def test_changelist_includes_columns_button(client_admin):
     content = response.content.decode()
     assert 'id="dyncol-button"' in content
     assert "Configure columns" in content
-    # The picker should *not* show pinned ``list_display_always`` rows.
-    # ``title`` is the only pinned column for BookAdmin.
-    item_block = content.split('class="dyncol-modal"')[1]
-    assert 'data-col-name="title"' not in item_block
+    # Columns are now serialised as JSON for the JS to render; the
+    # pinned ``list_display_always`` rows ("title") must not appear in
+    # the personal payload.
+    import json as _json
+    import re as _re
+
+    m = _re.search(
+        r'id="dyncol-personal-data"[^>]*>(.+?)</script>', content, _re.DOTALL
+    )
+    assert m, "dyncol-personal-data script must be present"
+    payload = _json.loads(m.group(1))
+    col_names = {row["col_name"] for row in payload}
+    assert "title" not in col_names
 
 
 @pytest.mark.django_db
@@ -325,10 +334,168 @@ def test_changelist_marks_personal_layout(client_admin):
 
 
 @pytest.mark.django_db
-def test_changelist_without_personal_layout_has_no_reset_button(client_admin):
+def test_changelist_without_personal_layout_hides_reset_button(client_admin):
     response = client_admin.get(reverse("admin:testapp_book_changelist"))
     content = response.content.decode()
-    assert 'id="dyncol-reset"' not in content
+    # The reset button is always present in the DOM (so JS can toggle it
+    # based on the scope radio); it ships hidden whenever the user has
+    # no personal layout to discard.
+    assert 'id="dyncol-reset"' in content
+    assert 'id="dyncol-reset" hidden' in content
+
+
+# ---------------------------------------------------------------------------
+# Global scope (superuser)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_changelist_shows_scope_radio_to_superuser(client_admin):
+    response = client_admin.get(reverse("admin:testapp_book_changelist"))
+    content = response.content.decode()
+    assert 'name="dyncol-scope"' in content
+    assert 'value="personal"' in content
+    assert 'value="global"' in content
+
+
+@pytest.mark.django_db
+def test_changelist_hides_scope_radio_from_non_superuser(client, book_factory):
+    from django.contrib.auth.models import Permission
+
+    User = get_user_model()
+    plain_staff = User.objects.create_user(
+        username="staffer", password="staffpass", is_staff=True
+    )
+    plain_staff.user_permissions.add(
+        *Permission.objects.filter(content_type__app_label="testapp")
+    )
+    client.force_login(plain_staff)
+    response = client.get(reverse("admin:testapp_book_changelist"))
+    content = response.content.decode()
+    assert 'id="dyncol-button"' in content
+    # Non-superuser staff get the picker but no scope switch.
+    assert 'name="dyncol-scope"' not in content
+
+
+@pytest.mark.django_db
+def test_save_endpoint_global_scope_updates_user_null_row(client_admin):
+    client_admin.get(reverse("admin:testapp_book_changelist"))
+    url = reverse("admin:testapp_book_dyncol_save")
+    response = client_admin.post(
+        url,
+        data=json.dumps(
+            {
+                "scope": "global",
+                "columns": [
+                    {"col_name": "isbn", "enabled": False, "ordering": 1},
+                    {"col_name": "author", "enabled": True, "ordering": 2},
+                ],
+            }
+        ),
+        content_type="application/json",
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["scope"] == "global"
+
+    global_row = ModelAdmin.objects.get(
+        user__isnull=True, class_name="tests.testapp.admin.BookAdmin"
+    )
+    assert global_row.modeladmincolumn_set.get(col_name="isbn").enabled is False
+
+    # The acting superuser did NOT get a personal row (they edited global).
+    User = get_user_model()
+    user = User.objects.get(username="admin")
+    assert not ModelAdmin.objects.filter(user=user).exists()
+
+
+@pytest.mark.django_db
+def test_save_endpoint_global_scope_rejected_for_non_superuser(client, book_factory):
+    User = get_user_model()
+    plain_staff = User.objects.create_user(
+        username="staffer", password="staffpass", is_staff=True
+    )
+    client.force_login(plain_staff)
+    book_factory()
+
+    client.get(reverse("admin:testapp_book_changelist"))
+    url = reverse("admin:testapp_book_dyncol_save")
+    response = client.post(
+        url,
+        data=json.dumps({"scope": "global", "columns": []}),
+        content_type="application/json",
+    )
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_save_endpoint_global_scope_affects_other_users(
+    client_admin, second_admin_user, book_factory
+):
+    book_factory(title="Globally visible", author="Some Author")
+
+    # Superuser writes a global layout
+    client_admin.get(reverse("admin:testapp_book_changelist"))
+    client_admin.post(
+        reverse("admin:testapp_book_dyncol_save"),
+        data=json.dumps(
+            {
+                "scope": "global",
+                "columns": [
+                    {"col_name": "isbn", "enabled": False, "ordering": 1},
+                    {"col_name": "author", "enabled": True, "ordering": 2},
+                    {"col_name": "pages", "enabled": False, "ordering": 3},
+                    {"col_name": "notes", "enabled": False, "ordering": 4},
+                ],
+            }
+        ),
+        content_type="application/json",
+    )
+
+    # Another user without a personal layout should now see the new global.
+    from django.test import Client
+
+    other_client = Client()
+    other_client.force_login(second_admin_user)
+    response = other_client.get(reverse("admin:testapp_book_changelist"))
+    content = response.content.decode()
+    assert 'class="field-title"' in content  # pinned, always
+    assert 'class="field-author"' in content  # global default still on
+    # ``isbn`` was disabled in the global save above.
+    assert 'class="field-isbn"' not in content
+
+
+@pytest.mark.django_db
+def test_reset_endpoint_global_scope_removes_global_row(client_admin):
+    client_admin.get(reverse("admin:testapp_book_changelist"))
+    reset_url = reverse("admin:testapp_book_dyncol_reset")
+    response = client_admin.post(
+        reset_url,
+        data=json.dumps({"scope": "global"}),
+        content_type="application/json",
+    )
+    assert response.status_code == 200
+    assert not ModelAdmin.objects.filter(
+        user__isnull=True, class_name="tests.testapp.admin.BookAdmin"
+    ).exists()
+
+
+@pytest.mark.django_db
+def test_reset_endpoint_global_scope_rejected_for_non_superuser(client, book_factory):
+    User = get_user_model()
+    plain_staff = User.objects.create_user(
+        username="staffer", password="staffpass", is_staff=True
+    )
+    client.force_login(plain_staff)
+    book_factory()
+
+    client.get(reverse("admin:testapp_book_changelist"))
+    response = client.post(
+        reverse("admin:testapp_book_dyncol_reset"),
+        data=json.dumps({"scope": "global"}),
+        content_type="application/json",
+    )
+    assert response.status_code == 403
 
 
 # ---------------------------------------------------------------------------

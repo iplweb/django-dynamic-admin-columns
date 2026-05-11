@@ -3,7 +3,7 @@
 import pytest
 from django.urls import reverse
 
-from dynamic_columns.models import ModelAdmin
+from dynamic_admin_columns.models import ModelAdmin
 
 
 @pytest.mark.django_db

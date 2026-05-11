@@ -7,7 +7,7 @@ from django.contrib.admin.utils import NotRelationField, get_model_from_relation
 from django.core.exceptions import FieldDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
-from dynamic_columns.models import ModelAdmin, ModelAdminColumn
+from dynamic_admin_columns.models import ModelAdmin, ModelAdminColumn
 
 
 @admin.action(description=_("Enable selected columns"))
