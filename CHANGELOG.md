@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2026-05-12
+
+### Fixed
+
+- **Published metadata no longer carries direct git references.**
+  `[example]` / `[example-grappelli]` optional-dependency groups
+  pinned `django-run-site` from a GitHub tag (it has no PyPI release
+  under its current name); PyPI's `/legacy/` upload endpoint rejects
+  any package metadata that contains direct-URL requirements, which
+  blocked the 0.4.1 upload. The dev stack moved to per-folder
+  `example/requirements-dev.txt` and
+  `example_grappelli/requirements-dev.txt` — installable with
+  `pip install -r …` from a checkout, invisible to PyPI consumers.
+
 ## [0.4.1] - 2026-05-12
 
 ### Fixed
@@ -169,6 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pytest-based test suite and minimal example Django project demonstrating
   end-user configuration of admin columns.
 
+[0.4.2]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.4.2
 [0.4.1]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.4.1
 [0.4.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.4.0
 [0.3.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.3.0

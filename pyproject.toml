@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "django-dynamic-admin-columns"
-version = "0.4.1"
+version = "0.4.2"
 description = "User-controllable, in-database list_display for Django admin: enable, disable and reorder columns at runtime."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
@@ -55,42 +55,22 @@ dev = [
     "ruff>=0.5",
     "model-bakery>=1.17",
 ]
-example = [
-    # Bundled dev stack for ``example/``:
-    # - ``django-run-site`` spins up Postgres + Redis testcontainers and
-    #   runs ``runserver`` against them.
-    # - ``django-dev-helpers`` exposes ``manage.py run_site`` (a thin
-    #   wrapper over ``run-site run``), plus an autologin endpoint and
-    #   dotfiles that make the dev stack discoverable to LLM coding
-    #   agents.
-    # ``django-run-site`` 0.5.0 is not yet on PyPI under that name
-    # (the 0.4 release was published as ``run-site``; the project was
-    # renamed starting in 0.5) — install from the GitHub tag.
-    "django-run-site @ git+https://github.com/iplweb/django-run-site.git@v0.5.0",
-    "django-dev-helpers>=0.1.5",
-    "psycopg[binary]>=3",
-]
-example-grappelli = [
-    # Same dev stack as ``[example]`` plus django-grappelli; used by
-    # ``example_grappelli/`` to demo the picker under a third-party
-    # admin skin with a Polish-localised UI.
-    "django-grappelli>=4.0",
-    "django-run-site @ git+https://github.com/iplweb/django-run-site.git@v0.5.0",
-    "django-dev-helpers>=0.1.5",
-    "psycopg[binary]>=3",
-]
+# NB: the bundled dev stack for ``example/`` and ``example_grappelli/``
+# (``django-run-site``, ``django-dev-helpers``, ``psycopg``,
+# ``django-grappelli``) is intentionally *not* an optional-dependency
+# group here. ``django-run-site`` is currently only published from a
+# GitHub tag and PyPI rejects direct-reference URLs in published
+# metadata; moving the example wiring to per-folder
+# ``requirements-dev.txt`` files keeps the published package clean and
+# pip-installable everywhere while still letting humans bootstrap the
+# demos with a one-liner. See ``example/requirements-dev.txt`` and
+# ``example_grappelli/requirements-dev.txt``.
 
 [project.urls]
 Homepage = "https://github.com/iplweb/django-dynamic-admin-columns"
 Repository = "https://github.com/iplweb/django-dynamic-admin-columns"
 Issues = "https://github.com/iplweb/django-dynamic-admin-columns/issues"
 Changelog = "https://github.com/iplweb/django-dynamic-admin-columns/blob/main/CHANGELOG.md"
-
-[tool.hatch.metadata]
-# Required because ``[project.optional-dependencies].example`` contains a
-# direct git URL (``django-run-site`` is not yet on PyPI under its new
-# name).
-allow-direct-references = true
 
 [tool.hatch.build]
 # ``.mo`` files are git-ignored (every contributor recompiles them

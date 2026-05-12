@@ -1,0 +1,15 @@
+# Dev stack for the stock-admin example project.
+#
+# Install from a checkout (``pip install -r example/requirements-dev.txt``)
+# rather than via an ``extras_require`` — ``django-run-site`` is not
+# (yet) on PyPI under its current name, and PyPI rejects published
+# packages that carry direct git references in their metadata.
+#
+# ``django-run-site`` spins up Postgres + Redis testcontainers and runs
+# ``runserver`` against them; ``django-dev-helpers`` provides
+# ``manage.py run_site`` plus the autologin endpoint and dotfiles that
+# make the dev stack discoverable to LLM coding agents.
+
+django-run-site @ git+https://github.com/iplweb/django-run-site.git@v0.5.0
+django-dev-helpers>=0.1.5
+psycopg[binary]>=3

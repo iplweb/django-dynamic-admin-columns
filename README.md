@@ -167,7 +167,8 @@ or, via [`run-site`](https://github.com/iplweb/django-run-site) +
 exploration and for LLM coding agents):
 
 ```bash
-uv pip install -e ".[example]"
+uv pip install -e .
+uv pip install -r example/requirements-dev.txt
 cd example
 uv run --no-sync python manage.py run_site
 ```

@@ -14,7 +14,8 @@ There are two paths.
 ### Plain Django (SQLite, no extras)
 
 ```bash
-uv pip install -e ".[example-grappelli]"
+uv pip install -e .
+uv pip install -r example_grappelli/requirements-dev.txt
 cd example_grappelli
 python manage.py migrate
 python manage.py loaddata sample
@@ -27,7 +28,7 @@ python manage.py runserver
 
 ### Via `run_site` (Postgres + Redis testcontainers, recommended)
 
-The `[example-grappelli]` optional-dependency group pulls in
+`example_grappelli/requirements-dev.txt` pins
 [`django-grappelli`](https://django-grappelli.readthedocs.io/),
 [`django-run-site`](https://github.com/iplweb/django-run-site) and
 [`django-dev-helpers`](https://pypi.org/project/django-dev-helpers/).
@@ -36,7 +37,8 @@ ports, runs migrations, seeds an `admin` / `admin` superuser, and
 opens your browser:
 
 ```bash
-uv pip install -e ".[example-grappelli]"
+uv pip install -e .
+uv pip install -r example_grappelli/requirements-dev.txt
 cd example_grappelli
 uv run --no-sync python manage.py compilemessages -l pl
 uv run --no-sync python manage.py run_site

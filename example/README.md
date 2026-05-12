@@ -21,15 +21,17 @@ python manage.py runserver
 
 ### Via `run_site` (Postgres + Redis testcontainers, recommended)
 
-The `[example]` optional-dependency group pulls in
-[`django-run-site`](https://github.com/iplweb/django-run-site) and
+`example/requirements-dev.txt` pins
+[`django-run-site`](https://github.com/iplweb/django-run-site) (from a
+GitHub tag — not yet on PyPI under that name) and
 [`django-dev-helpers`](https://pypi.org/project/django-dev-helpers/).
 The combination spins up Postgres + Redis containers on random free
 ports, runs migrations, seeds an `admin` / `admin` superuser, and
 opens your browser:
 
 ```bash
-uv pip install -e ".[example]"
+uv pip install -e .
+uv pip install -r example/requirements-dev.txt
 cd example
 uv run --no-sync python manage.py run_site
 ```

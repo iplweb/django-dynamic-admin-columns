@@ -1,0 +1,11 @@
+# Dev stack for the grappelli-skinned example project.
+#
+# Same shape as ``example/requirements-dev.txt`` plus
+# ``django-grappelli``. Install with ``pip install -r
+# example_grappelli/requirements-dev.txt`` after the editable package
+# itself.
+
+django-grappelli>=4.0
+django-run-site @ git+https://github.com/iplweb/django-run-site.git@v0.5.0
+django-dev-helpers>=0.1.5
+psycopg[binary]>=3
