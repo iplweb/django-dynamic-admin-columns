@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: django-dynamic-admin-columns 0.4.2\n"
+"Project-Id-Version: django-dynamic-admin-columns 0.4.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 21:59+0200\n"
+"POT-Creation-Date: 2026-05-12 12:02+0200\n"
 "PO-Revision-Date: 2026-05-11 21:30+0200\n"
 "Last-Translator: Michał Pasternak <michal.dtz@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -39,7 +39,7 @@ msgstr "Nazwa kolumny"
 msgid "Admin dynamic columns"
 msgstr "Dynamiczne kolumny administracji"
 
-#: mixins.py:186
+#: mixins.py:183
 msgid ""
 "Editing the global defaults. Every user without a personal layout will see "
 "these columns."
@@ -47,13 +47,12 @@ msgstr ""
 "Edytujesz globalne ustawienia domyślne. Każdy użytkownik bez osobistego "
 "układu zobaczy te kolumny."
 
-#: mixins.py:190
+#: mixins.py:187
 msgid ""
 "★ You are viewing your personal layout. Saves apply only to your account."
-msgstr ""
-"★ Widzisz swój osobisty układ. Zapisy dotyczą wyłącznie Twojego konta."
+msgstr "★ Widzisz swój osobisty układ. Zapisy dotyczą wyłącznie Twojego konta."
 
-#: mixins.py:194 templates/dynamic_admin_columns/change_list.html:71
+#: mixins.py:191 templates/dynamic_admin_columns/change_list.html:71
 #: templates/dynamic_admin_columns/grappelli/change_list.html:98
 msgid ""
 "You are viewing the global defaults. Saving will create a personal layout "
@@ -62,32 +61,32 @@ msgstr ""
 "Widzisz globalne ustawienia domyślne. Zapisanie zmian utworzy osobisty układ "
 "przypisany do Twojego konta."
 
-#: mixins.py:197 templates/dynamic_admin_columns/change_list.html:87
+#: mixins.py:194 templates/dynamic_admin_columns/change_list.html:87
 #: templates/dynamic_admin_columns/grappelli/change_list.html:123
 msgid "Discard personal layout"
 msgstr "Usuń osobisty układ"
 
-#: mixins.py:198
+#: mixins.py:195
 msgid "Reset global defaults from code"
 msgstr "Przywróć globalne ustawienia z kodu"
 
-#: mixins.py:200
+#: mixins.py:197
 msgid ""
 "Reset the GLOBAL defaults? They will be re-derived from code on the next "
 "changelist load."
 msgstr ""
-"Zresetować GLOBALNE ustawienia? Zostaną one ponownie wyznaczone z kodu "
-"przy następnym wyświetleniu listy."
+"Zresetować GLOBALNE ustawienia? Zostaną one ponownie wyznaczone z kodu przy "
+"następnym wyświetleniu listy."
 
-#: mixins.py:204
+#: mixins.py:201
 msgid "Discard your personal column layout and use the defaults?"
 msgstr "Usunąć Twój osobisty układ kolumn i wrócić do ustawień domyślnych?"
 
-#: mixins.py:206
+#: mixins.py:203
 msgid "Failed to save columns: "
 msgstr "Nie udało się zapisać kolumn: "
 
-#: mixins.py:207
+#: mixins.py:204
 msgid "Failed to reset."
 msgstr "Nie udało się zresetować."
 

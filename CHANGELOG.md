@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.3] - 2026-05-12
+
+### Changed
+
+- **Translation workflow is now strictly per-app.** The package
+  catalog (`src/dynamic_admin_columns/locale/pl/`) was previously
+  regenerable from the repo root, which silently slurped strings from
+  `example/` and `example_grappelli/` into the published `.po`. Source
+  line references in `django.po` are now refreshed against the current
+  code (`mixins.py` line numbers shifted by three lines) and the file
+  is guaranteed to contain only msgids extracted from
+  `src/dynamic_admin_columns/`. No msgid / msgstr content changes —
+  end-user-visible strings and their Polish translations are identical
+  to 0.4.2.
+- **Plain example (`example/library/`) is now translation-ready.**
+  Model field labels and the app `verbose_name` were promoted from
+  plain literals to `gettext_lazy`, and the app ships its own
+  `locale/pl/` catalog mirroring `example_grappelli/library/`. The
+  plain example's `LANGUAGE_CODE` remains `en-us`; the Polish catalog
+  is provided so developers experimenting with the example can flip
+  the setting and see a fully translated demo without first having to
+  add `_()` wrappers. The package's own catalog is unaffected.
+
+### Added
+
+- `CLAUDE.md` documenting the per-app `makemessages` rule, the
+  two-table data model with allowlist-gated `class_name` loading, and
+  the dual stock/grappelli changelist template flow, so future
+  automated assistants can be productive without re-reading
+  `mixins.py` and `models.py` end-to-end.
+
 ## [0.4.2] - 2026-05-12
 
 ### Fixed
