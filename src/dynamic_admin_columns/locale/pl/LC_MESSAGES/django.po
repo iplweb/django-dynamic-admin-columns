@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: django-dynamic-admin-columns 0.4.0\n"
+"Project-Id-Version: django-dynamic-admin-columns 0.4.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-11 21:59+0200\n"
 "PO-Revision-Date: 2026-05-11 21:30+0200\n"

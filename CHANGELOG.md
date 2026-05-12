@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-05-12
+
+### Fixed
+
+- **Compiled translation catalogs (`.mo`) now ship in the published
+  wheel and sdist.** Hatchling honours `.gitignore` by default and the
+  repo excludes `*.mo` (each contributor compiles locally from `.po`),
+  which silently meant that PyPI users of 0.2 – 0.4.0 never received
+  any of the Polish strings. `pyproject.toml` now sets
+  `[tool.hatch.build] artifacts = ["*.mo"]` so the published artifacts
+  contain the compiled catalogs and translations work out of the box
+  for `pip install`-from-PyPI consumers.
+
+### Changed
+
+- `README.md` — embedded a picker-modal screenshot, dropped the
+  standalone Python support table (the Django × Python matrix already
+  conveys the same information).
+
 ## [0.4.0] - 2026-05-11
 
 ### Added
@@ -150,6 +169,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pytest-based test suite and minimal example Django project demonstrating
   end-user configuration of admin columns.
 
+[0.4.1]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.4.1
 [0.4.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.4.0
 [0.3.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.3.0
 [0.2.0]: https://github.com/iplweb/django-dynamic-admin-columns/releases/tag/v0.2.0

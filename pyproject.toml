@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "django-dynamic-admin-columns"
-version = "0.4.0"
+version = "0.4.1"
 description = "User-controllable, in-database list_display for Django admin: enable, disable and reorder columns at runtime."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
@@ -91,6 +91,15 @@ Changelog = "https://github.com/iplweb/django-dynamic-admin-columns/blob/main/CH
 # direct git URL (``django-run-site`` is not yet on PyPI under its new
 # name).
 allow-direct-references = true
+
+[tool.hatch.build]
+# ``.mo`` files are git-ignored (every contributor recompiles them
+# locally from ``.po``), but they MUST ship in the published wheel and
+# sdist — without them, ``LocaleMiddleware`` cannot serve the Polish
+# (or any other) translation catalog to end users. Hatchling honours
+# ``.gitignore`` by default; ``artifacts`` is the override that
+# re-includes specific patterns.
+artifacts = ["*.mo"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/dynamic_admin_columns"]

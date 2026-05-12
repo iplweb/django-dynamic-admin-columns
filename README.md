@@ -9,6 +9,8 @@
 enable, disable and reorder columns at runtime through the admin itself — no
 code changes, no redeploy.
 
+![Column picker modal open over the Books changelist](docs/picker-modal.png)
+
 ## Why
 
 `django.contrib.admin.ModelAdmin.list_display` is a *developer-time* setting.
@@ -180,24 +182,15 @@ and the list of pre-loaded users.
 
 ## Supported versions
 
-### Python
-
-| Python | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 |
-|--------|------|------|------|------|------|
-|        | ✓    | ✓    | ✓    | ✓    | ✓    |
-
-### Django
-
 This package targets **actively supported** Django releases. Older
 Django versions (4.2 LTS, 5.0, 5.1) are end-of-life upstream and are
-not covered by CI. If you are still on those releases, pin
-`django-dynamic-admin-columns < 0.2` once a 0.2 release lands; the 0.1.x
-series will keep working with whatever Django you can install.
+not covered by CI; pin `django-dynamic-admin-columns < 0.2` if you
+need to stay on them.
 
-| Django  | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 | Status                                 |
-|---------|------|------|------|------|------|----------------------------------------|
+| Django  | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 | Status                                |
+|---------|------|------|------|------|------|---------------------------------------|
 | 5.2 LTS | ✓    | ✓    | ✓    | ✓    | —    | Active LTS, extended support Apr 2028 |
-| 6.0     | —    | —    | ✓    | ✓    | ✓    | Current mainstream                     |
+| 6.0     | —    | —    | ✓    | ✓    | ✓    | Current mainstream                    |
 
 CI exercises every ✓ cell on GitHub Actions.
 
