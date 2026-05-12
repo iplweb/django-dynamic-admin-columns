@@ -48,11 +48,15 @@
     color: #222;
     width: min(520px, 92vw);
     max-height: 80vh;
-    overflow: auto;
     padding: 24px;
     border-radius: 8px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
     z-index: 1;
+    /* Flex column so the header (h2, scope, status, help) and the
+     * action bar stay put while only ``.dyncol-list`` scrolls — keeps
+     * Save/Reset/Cancel always visible regardless of column count. */
+    display: flex;
+    flex-direction: column;
 }
 
 .dyncol-modal-content h2 {
@@ -139,6 +143,13 @@
     margin: 0 0 16px;
     border: 1px solid #e1e1e1;
     border-radius: 4px;
+    /* The only scrolling child of ``.dyncol-modal-content`` — flex
+     * sizing plus ``min-height:0`` lets it shrink inside the flex
+     * column instead of pushing the action bar off-screen. */
+    flex: 1 1 auto;
+    min-height: 120px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .dyncol-item {
@@ -202,6 +213,9 @@
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
+    /* Anchored to the bottom of the modal-content flex column; the
+     * list shrinks around it instead of the other way round. */
+    flex: 0 0 auto;
 }
 .dyncol-spacer {
     flex: 1;

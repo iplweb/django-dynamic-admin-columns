@@ -41,6 +41,11 @@
 <div id="dyncol-modal" class="dyncol-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dyncol-modal-title">
     <div class="dyncol-modal-backdrop" data-dyncol-close></div>
     <div class="dyncol-modal-content" role="document">
+        {# Rendered inside the modal so ``column-picker.js`` can read the
+           token from the DOM. The cookie fallback only works when
+           ``CSRF_COOKIE_HTTPONLY = False`` (the Django default); projects
+           that harden it to ``True`` would otherwise see save/reset 403. #}
+        {% csrf_token %}
         <h2 id="dyncol-modal-title">{% translate "Configure columns" %}</h2>
 
         {% if dynamic_admin_columns.is_superuser %}

@@ -24,6 +24,19 @@
         return null;
     }
 
+    function getCsrfToken() {
+        // Why: ``CSRF_COOKIE_HTTPONLY = True`` is a recommended hardening
+        // (Django security docs) but hides the cookie from JavaScript.
+        // Prefer the server-rendered ``{% csrf_token %}`` input we embed
+        // in the modal, fall back to the cookie for projects that don't.
+        var modal = document.getElementById("dyncol-modal");
+        var input =
+            (modal && modal.querySelector("input[name='csrfmiddlewaretoken']")) ||
+            document.querySelector("input[name='csrfmiddlewaretoken']");
+        if (input && input.value) return input.value;
+        return getCookie("csrftoken") || "";
+    }
+
     function ready(fn) {
         if (document.readyState === "loading") {
             document.addEventListener("DOMContentLoaded", fn);
@@ -108,6 +121,27 @@
             });
         }
 
+        // Auto-scroll the list when the dragged pointer approaches its
+        // top or bottom edge. ``dragover`` from the child items bubbles
+        // up to the list, so this fires throughout the drag without
+        // having to bind on every item. Attached once per list element —
+        // ``attachDragHandlers`` runs on every re-render (scope toggle),
+        // so the ``_dyncolScrollBound`` flag prevents listener leaks.
+        if (!list._dyncolScrollBound) {
+            list._dyncolScrollBound = true;
+            var SCROLL_ZONE = 40; // px — distance from edge that triggers scroll
+            var SCROLL_STEP = 14; // px per dragover tick
+            list.addEventListener("dragover", function (event) {
+                var rect = list.getBoundingClientRect();
+                var y = event.clientY;
+                if (y < rect.top + SCROLL_ZONE) {
+                    list.scrollTop -= SCROLL_STEP;
+                } else if (y > rect.bottom - SCROLL_ZONE) {
+                    list.scrollTop += SCROLL_STEP;
+                }
+            });
+        }
+
         list.querySelectorAll(".dyncol-item").forEach(function (item) {
             item.addEventListener("dragstart", function (event) {
                 dragged = item;
@@ -178,7 +212,7 @@
             credentials: "same-origin",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken") || "",
+                "X-CSRFToken": getCsrfToken(),
                 "X-Requested-With": "XMLHttpRequest",
             },
             body: JSON.stringify(payload || {}),

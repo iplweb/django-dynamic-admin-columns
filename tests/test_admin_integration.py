@@ -61,3 +61,17 @@ def test_forbidden_columns_never_appear_in_database(client_admin, book_factory):
     persisted = set(ma.modeladmincolumn_set.values_list("col_name", flat=True))
     # ``legacy_data`` is filtered by the BookAdmin's ``list_display_forbidden``.
     assert "legacy_data" not in persisted
+
+
+@pytest.mark.django_db
+def test_changelist_embeds_csrf_token_in_picker_modal(client_admin, book_factory):
+    """The picker modal must render a CSRF token so the JS can post even
+    when downstream projects set ``CSRF_COOKIE_HTTPONLY = True``."""
+    book_factory()
+    response = client_admin.get(reverse("admin:testapp_book_changelist"))
+    content = response.content.decode()
+    # The token must sit between the modal-content opener and the modal
+    # title — the slice the JS reads through ``#dyncol-modal``.
+    modal_start = content.index('class="dyncol-modal-content"')
+    modal_title = content.index('id="dyncol-modal-title"', modal_start)
+    assert 'name="csrfmiddlewaretoken"' in content[modal_start:modal_title]

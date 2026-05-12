@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.5] - 2026-05-12
+
+### Fixed
+
+- **CSRF 403 on save/reset when `CSRF_COOKIE_HTTPONLY = True`.** The
+  picker JS used to read the token exclusively from `document.cookie`,
+  which is unreachable when downstream projects harden the cookie per
+  Django's security recommendations — the `X-CSRFToken` header was
+  posted empty and Django rejected it with "incorrect length". Both
+  changelist templates now render `{% csrf_token %}` inside the modal
+  and `column-picker.js` prefers the hidden input, falling back to the
+  cookie for projects that don't override the default.
+
+### Changed
+
+- **Column list inside the picker now scrolls; Save/Reset/Cancel stay
+  pinned.** `.dyncol-modal-content` switched to a flex column with the
+  list as the only scrolling child (`flex: 1 1 auto; overflow-y:
+  auto`), so the action bar is always visible regardless of column
+  count.
+- **Auto-scroll while dragging.** A list-level `dragover` handler
+  nudges `scrollTop` when the dragged pointer enters a 40 px zone near
+  the top or bottom edge, so reordering across long lists no longer
+  requires letting go and scrolling manually.
+
 ## [0.4.4] - 2026-05-12
 
 ### Fixed
