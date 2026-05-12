@@ -11,9 +11,7 @@ ALLOWED_HOSTS = ["*"]
 
 # ``django-dev-helpers`` is part of the [example] optional-dependency
 # group; pulling it in is what makes ``manage.py run_site`` available.
-_DEV_HELPERS_INSTALLED = (
-    importlib.util.find_spec("django_dev_helpers") is not None
-)
+_DEV_HELPERS_INSTALLED = importlib.util.find_spec("django_dev_helpers") is not None
 
 INSTALLED_APPS = [
     "django.contrib.admin",

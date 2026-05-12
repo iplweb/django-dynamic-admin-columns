@@ -188,10 +188,10 @@ Django versions (4.2 LTS, 5.0, 5.1) are end-of-life upstream and are
 not covered by CI; pin `django-dynamic-admin-columns < 0.2` if you
 need to stay on them.
 
-| Django  | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 | Status                                |
-|---------|------|------|------|------|------|---------------------------------------|
-| 5.2 LTS | ✓    | ✓    | ✓    | ✓    | —    | Active LTS, extended support Apr 2028 |
-| 6.0     | —    | —    | ✓    | ✓    | ✓    | Current mainstream                    |
+| Django  | 3.11 | 3.12 | 3.13 | 3.14 | Status                                |
+|---------|------|------|------|------|---------------------------------------|
+| 5.2 LTS | ✓    | ✓    | ✓    | —    | Active LTS, extended support Apr 2028 |
+| 6.0     | —    | ✓    | ✓    | ✓    | Current mainstream                    |
 
 CI exercises every ✓ cell on GitHub Actions.
 
