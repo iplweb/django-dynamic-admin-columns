@@ -140,11 +140,11 @@ def test_change_list_template_composes_with_import_export_pattern():
             self.ie_base_change_list_template = base
             try:
                 self.change_list_template = "import_export/change_list.html"
-            except AttributeError:  # pragma: no cover - regression guard
+            except AttributeError as err:  # pragma: no cover - regression guard
                 raise AssertionError(
                     "change_list_template assignment failed — the property "
                     "must accept writes for downstream composition to work."
-                )
+                ) from err
 
     class Combo(ImportExportLike, DynamicColumnsMixin):
         pass
