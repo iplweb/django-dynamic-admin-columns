@@ -67,10 +67,30 @@ class DynamicColumnsMixin:
         ``apps.is_installed`` can be queried reliably. Override either of
         the underscore-prefixed attributes (or the property itself) to
         customise the picker template in a subclass.
+
+        The property is also settable: assigning to
+        ``self.change_list_template`` (as e.g. ``django-import-export``'s
+        ``ImportExportMixinBase.__init__`` does to compose its own
+        changelist template with whatever the host class already chose)
+        stores the value on the instance, and subsequent reads return
+        that override instead of the skin-derived default. Delete the
+        instance attribute to fall back to the dynamic choice again.
         """
+        try:
+            return self.__dict__["_change_list_template_override"]
+        except KeyError:
+            pass
         if _grappelli_installed():
             return self._change_list_template_grappelli
         return self._change_list_template_default
+
+    @change_list_template.setter
+    def change_list_template(self, value):
+        self.__dict__["_change_list_template_override"] = value
+
+    @change_list_template.deleter
+    def change_list_template(self):
+        self.__dict__.pop("_change_list_template_override", None)
 
     @cached_property
     def _modeladmin_enabled(self):

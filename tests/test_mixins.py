@@ -83,3 +83,75 @@ def test_mixin_works_when_list_display_unchanged_but_list_display_always_set(
     persisted = set(ma.modeladmincolumn_set.values_list("col_name", flat=True))
     assert "__str__" not in persisted
     assert "author" in persisted
+
+
+def test_change_list_template_default_resolves_to_skin_template():
+    """Without assignment the property returns the skin-derived template."""
+
+    class A(DynamicColumnsMixin):
+        pass
+
+    instance = A()
+    # Stock admin (no grappelli in tests/settings.py INSTALLED_APPS).
+    assert instance.change_list_template == "dynamic_admin_columns/change_list.html"
+
+
+def test_change_list_template_is_settable_per_instance():
+    """The property accepts assignment — needed for composition with
+    libraries like ``django-import-export`` whose ``ImportExportMixinBase``
+    deliberately does ``self.change_list_template = ...`` in ``__init__``
+    to wrap whatever template the host ``ModelAdmin`` already chose.
+
+    Without a setter this assignment silently fails (the upstream code
+    swallows ``AttributeError``), and the host's Export object-tool never
+    renders because the active template stays as the picker's own
+    ``change_list.html`` which doesn't include ``import_export``'s tools.
+    """
+
+    class A(DynamicColumnsMixin):
+        pass
+
+    instance = A()
+    instance.change_list_template = "custom/template.html"
+    assert instance.change_list_template == "custom/template.html"
+
+    # Per-instance only — siblings are unaffected.
+    other = A()
+    assert other.change_list_template == "dynamic_admin_columns/change_list.html"
+
+    # Deleting the override restores the default.
+    del instance.change_list_template
+    assert instance.change_list_template == "dynamic_admin_columns/change_list.html"
+
+
+def test_change_list_template_composes_with_import_export_pattern():
+    """End-to-end of the composition idiom: a downstream ``ModelAdmin``
+    that mixes both ``DynamicColumnsMixin`` and a class that — like
+    ``import_export.admin.ImportExportMixinBase`` — captures the existing
+    ``change_list_template`` as a fallback and reassigns the active one
+    must end up with both values exposed (the override active, the
+    picker template available as the chained base)."""
+
+    class ImportExportLike:
+        """Minimal stand-in for django-import-export's init hook."""
+
+        def __init__(self):
+            base = self.change_list_template
+            self.ie_base_change_list_template = base
+            try:
+                self.change_list_template = "import_export/change_list.html"
+            except AttributeError:  # pragma: no cover - regression guard
+                raise AssertionError(
+                    "change_list_template assignment failed — the property "
+                    "must accept writes for downstream composition to work."
+                )
+
+    class Combo(ImportExportLike, DynamicColumnsMixin):
+        pass
+
+    instance = Combo()
+    assert instance.change_list_template == "import_export/change_list.html"
+    assert (
+        instance.ie_base_change_list_template
+        == "dynamic_admin_columns/change_list.html"
+    )

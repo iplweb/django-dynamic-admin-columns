@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.4] - 2026-05-12
+
+### Fixed
+
+- **`change_list_template` is now a settable property.** The skin-aware
+  `@property` introduced in 0.4.x had no setter, so any downstream
+  `ModelAdmin` that composed `DynamicColumnsMixin` with a library that
+  reassigns `self.change_list_template` in `__init__` — notably
+  `django-import-export`'s `ImportExportMixinBase`, which deliberately
+  wraps the existing template by stashing it as
+  `ie_base_change_list_template` and pointing the active template at
+  its own — silently lost that composition. The assignment raised
+  `AttributeError` (caught upstream and logged only as `failed to
+  assign change_list_template attribute`), so the host's Export
+  object-tool never rendered. The property now stores assignments to
+  an instance-level `_change_list_template_override`; reading returns
+  the override when set, otherwise the skin-derived default; `del
+  self.change_list_template` clears the override. Three regression
+  tests cover the round-trip, per-instance isolation, and the
+  import_export-style composition pattern end-to-end.
+
 ## [0.4.3] - 2026-05-12
 
 ### Changed
