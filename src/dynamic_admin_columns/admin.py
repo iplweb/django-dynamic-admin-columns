@@ -42,13 +42,13 @@ class ModelAdminColumnAdmin(SortableAdminMixin, DjangoModelAdmin):
     def has_add_permission(self, request):
         return False
 
+    @admin.display(description=_("Model admin name"))
     def col_parent_name(self, obj: ModelAdminColumn):
         """Verbose name of model in column's ModelAdmin."""
         class_ = obj.parent.model_ref.model_class()
         return class_._meta.verbose_name
 
-    col_parent_name.short_description = _("Model admin name")
-
+    @admin.display(description=_("Column name"))
     def col_verbose_name(self, obj: ModelAdminColumn):
         """Resolve a human-readable name of a ``ModelAdminColumn``.
 
@@ -98,5 +98,3 @@ class ModelAdminColumnAdmin(SortableAdminMixin, DjangoModelAdmin):
                     pass
 
         return ret
-
-    col_verbose_name.short_description = _("Column name")
