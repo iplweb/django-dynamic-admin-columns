@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-05-31
+
+### Changed
+
+- **`0001_initial` is now idempotent and swappable-user-model safe.**
+  The migration builds its tables through the schema editor
+  (`create_model`), guarded to run only when `dynamic_columns_*` are
+  absent, instead of a plain `CreateModel`. Two payoffs:
+  - **Pre-existing schema no longer collides.** Projects that predate
+    the package extraction (notably BPP, whose in-tree `dynamic_columns`
+    app created these tables years ago) can apply `0001_initial` onto a
+    database that already carries the tables — it detects them and
+    no-ops. This makes the dedicated `MIGRATION_MODULES` override such
+    projects used to ship unnecessary; they can drop it and consume the
+    package's migrations directly.
+  - **Custom user models resolve correctly on a from-empty build.** The
+    `user` FK is materialised by the schema editor against
+    `settings.AUTH_USER_MODEL`, so a fresh `migrate` (or
+    `migrate --create-db` / baseline rebuild) on a project with a
+    swapped user model points the FK at the right table instead of a
+    hard-coded `auth_user`.
+
+  The migration state is unchanged (a `CreateModel` pair plus the
+  existing constraints, now under `SeparateDatabaseAndState`), so
+  databases that already recorded `0001_initial` as applied are
+  unaffected and `makemigrations` detects no drift.
+
 ## [0.4.5] - 2026-05-12
 
 ### Fixed
