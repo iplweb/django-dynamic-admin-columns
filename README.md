@@ -141,8 +141,8 @@ class BookAdmin(DynamicColumnsMixin, admin.ModelAdmin):
     list_display_allowed = ["publisher"]
 
     list_select_related = {
-        "__always__": ["category"],       # always joined
-        "author": ["author"],             # joined only if the column is visible
+        "__always__": ["category"],  # always joined
+        "author": ["author"],  # joined only if the column is visible
         "publisher": ["publisher"],
     }
 ```
