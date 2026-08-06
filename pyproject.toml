@@ -43,7 +43,15 @@ classifiers = [
 ]
 dependencies = [
     "Django>=5.2",
-    "django-admin-sortable2>=2.1",
+    # 2.1.2 is the floor, not 2.1: ``SortableAdminMixin`` up to and
+    # including 2.1.1 returned ``pathlib.Path`` objects from its
+    # ``change_list_template`` property. Django's template loaders
+    # tolerated that through 5.2, but on 6.0+ the lookup no longer
+    # matches and every sortable changelist — including this package's
+    # own ``ModelAdminColumn`` admin — dies with ``TemplateDoesNotExist``
+    # (surfacing as ``TypeError: sequence item 0: expected str instance,
+    # PosixPath found``). 2.1.2 wraps the names in ``str()``.
+    "django-admin-sortable2>=2.1.2",
 ]
 
 [project.optional-dependencies]
