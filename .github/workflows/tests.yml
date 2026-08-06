@@ -25,11 +25,14 @@ jobs:
         # this list. Django 5.2 LTS technically supports 3.10 too, but
         # we drop that cell because the package itself sets a 3.11 floor.
         python: ["3.11", "3.12", "3.13", "3.14"]
-        django: ["5.2", "6.0"]
+        django: ["5.2", "6.0", "6.1"]
         exclude:
           # Django 6.0 requires Python 3.12+.
           - python: "3.11"
             django: "6.0"
+          # Django 6.1 requires Python 3.12+.
+          - python: "3.11"
+            django: "6.1"
           # Django 5.2 LTS does not support Python 3.14.
           - python: "3.14"
             django: "5.2"

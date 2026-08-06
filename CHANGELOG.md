@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Support for Django 6.1.** The CI matrix now covers Django 6.1
+  alongside 5.2 LTS and 6.0, and the trove classifiers advertise it.
+  Django 6.1 requires Python 3.12+, so the `3.11 × 6.1` cell is
+  excluded from the matrix just like `3.11 × 6.0`.
+
 ## [0.5.0] - 2026-05-31
 
 ### Changed

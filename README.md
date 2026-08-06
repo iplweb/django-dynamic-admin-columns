@@ -191,7 +191,8 @@ need to stay on them.
 | Django  | 3.11 | 3.12 | 3.13 | 3.14 | Status                                |
 |---------|------|------|------|------|---------------------------------------|
 | 5.2 LTS | ✓    | ✓    | ✓    | —    | Active LTS, extended support Apr 2028 |
-| 6.0     | —    | ✓    | ✓    | ✓    | Current mainstream                    |
+| 6.0     | —    | ✓    | ✓    | ✓    | Previous mainstream                   |
+| 6.1     | —    | ✓    | ✓    | ✓    | Current mainstream                    |
 
 CI exercises every ✓ cell on GitHub Actions.
 
