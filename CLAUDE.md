@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `django-dynamic-admin-columns` is a Django library that moves `ModelAdmin.list_display` from a developer-time setting into the database, so end-users can enable/disable/reorder admin columns at runtime through a modal picker rendered into the changelist itself. Extracted from `iplweb/django-bpp`, in production since 2022.
 
-Distributed on PyPI; CI matrix is Django 5.2 LTS + 6.0 on Python 3.11–3.14 (see `.github/workflows/tests.yml` for excluded cells).
+Distributed on PyPI; CI matrix is Django 5.2 LTS + 6.0 + 6.1 on Python 3.11–3.14 (see `.github/workflows/tests.yml` for excluded cells).
 
 ## Commands
 

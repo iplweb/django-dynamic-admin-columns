@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Support for Django 6.1.** The CI matrix now covers Django 6.1
+  alongside 5.2 LTS and 6.0, and the trove classifiers advertise it.
+  Django 6.1 requires Python 3.12+, so the `3.11 × 6.1` cell is
+  excluded from the matrix just like `3.11 × 6.0`.
+
+- **Tests for the package's own admin classes.** `tests/test_own_admin.py`
+  renders the `ModelAdmin` and `ModelAdminColumn` changelists, the
+  column change form and `adminsortable2`'s drag-and-drop reordering
+  endpoint. `ModelAdminColumnAdmin` mixes in
+  `adminsortable2.admin.SortableAdminMixin` — the most Django-version-
+  fragile surface in the package — and nothing exercised it before.
+
+### Fixed
+
+- **`django-admin-sortable2` floor raised from `>=2.1` to `>=2.1.2`.**
+  Releases 2.1 and 2.1.1 returned `pathlib.Path` objects from
+  `SortableAdminMixin.change_list_template`. Django's template loaders
+  tolerated that through 5.2, but on Django 6.0 and 6.1 the lookup no
+  longer resolves, so every sortable changelist — including this
+  package's own `ModelAdminColumn` admin — raised
+  `TypeError: sequence item 0: expected str instance, PosixPath found`
+  while building the `TemplateDoesNotExist` message. 2.1.2 wraps the
+  names in `str()`. Verified locally against Django 5.2, 6.0 and 6.1
+  at both the new floor and the current 2.3.1.
+
 ## [0.5.0] - 2026-05-31
 
 ### Changed
